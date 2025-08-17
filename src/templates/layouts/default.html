@@ -11,15 +11,24 @@
     <meta name="theme-color" content="#1C509D" />
     <meta name="format-detection" content="telephone=no" />
     <!-- style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" media="all" href="assets/css/style.min.css" />
 </head>
 <body>
 
-    {{> header }}
+    <main data-barba="container" data-barba-namespace="default">
+        <div class="main-wrap">
 
-    {{> body }}
+        {{> header }}
 
-    {{> footer }}
+        {{> body }}
+
+        {{> footer }}
+
+        </div>
+    </main>
         
     <a class="back" href="/">back to all pages</a>
     <!-- END content -->

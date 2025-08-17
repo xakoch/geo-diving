@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Geo Diving - Preview page</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+    <!-- favicon -->
+    <meta name="msapplication-TileColor" content="#1C509D">
+    <meta name="theme-color" content="#1C509D" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" media="all" href="assets/css/style.min.css" />
+</head>
+<body>
+
+    <main data-barba="container" data-barba-namespace="default">
+        <div class="main-wrap">
+
+        <!-- header -->
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__left">
+                    <a class="header__logo" href="home.html">
+                        <img src="assets/img/logo.svg" alt="Geo sidemount diving">
+                    </a>
+                </div>
+                <div class="header__right">
+                    <ul class="header__menu">
+                        <li class="current-menu-item"><a href="home.html">Sākumlapa</a></li>
+                        <li><a href="#about">Par mani</a></li>
+                        <li><a href="#blog">Pakalpojumi</a></li>
+                        <li><a href="#register">Galerija</a></li>
+                        <li><a href="#tssard">Kontakti</a></li>
+                        <li><a href="#ref">Referal program</a></li>
+                    </ul>
+                    <div class="header__action">
+                        <a class="header__call" href="tel:+37123111390">+371 23 111 390</a>
+                        <div class="header__lang lang-dropdown">
+                            <a class="header__lang-item" href="#">
+                                <span>LV</span>
+                                <svg width="7" height="6" viewBox="0 0 7 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 6L0.468911 0.75L6.53109 0.75L3.5 6Z" fill="black"/></svg>
+                            </a>
+                            <ul class="language-chooser language-chooser-both qtranxs_language_chooser" id="language-chooser">
+                                <li><a href="/en/" class="qtranxs_flag qtranxs_flag_en qtranxs_flag_and_text" title="En (en)"><span>En</span></a></li>
+                            </ul>
+                            <div class="qtranxs_widget_end"></div>
+                        </div>
+                    </div>
+                    <a class="header__cta" href="#">produkti</a>
+                    <button class="burger">
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- /header -->
+        
+            <style>
+                .devpage {
+                    padding: 60px 0;
+                }
+        
+                .devpages {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    grid-gap: 15px;
+                    margin-top: 80px;
+                }
+        
+                @media only screen and (max-width: 1024px) {
+                    .devpages {
+                        grid-template-columns: repeat(2, 1fr);
+                        grid-gap: 30px;
+                    }
+                }
+                .devpage h2 {
+                    margin-bottom: 20px !important;
+                }
+        
+                .devpage a {
+                    display: table;
+                    text-decoration: underline !important;
+                    margin-bottom: 15px;
+                    position: relative;
+                }
+        
+                .devpage a::after {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    right: -30px;
+                }
+        
+                .devpage a.none {
+                    color: #B2B0BB;
+                    cursor: not-allowed;
+                }
+        
+                .devpage a.none::after {
+                    content: "🔒";
+                }
+        
+                .devpage a.process {
+                    color: #EE9A6B;
+                }
+        
+                .devpage a.process::after {
+                    content: "⚔️";
+                }
+        
+                .devpage a.done {
+                    color: #27C062;
+                }
+        
+                .devpage a.done::after {
+                    content: "✅";
+                }
+            </style>
+        
+            <div class="container">
+                <div class="devpage">
+                    <h1>Geo Diving - Pages</h1>
+                    <hr>
+                    <div class="devpages">
+                        <div class="dev__group">
+                            <h2>Pages</h2>
+                            <a class="process" href="home.html">Home</a>
+                            <a class="none" href="single.html">Single page</a>
+                            <a class="none" href="privacy.html">Privacy Policy</a>
+                            <a class="none" href="terms.html">Terms & Conditions</a>
+                            <a class="none" href="404.html">404</a>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+
+
+        </div>
+    </main>
+        
+    <a class="back" href="/">back to all pages</a>
+    <!-- END content -->
+
+    <!-- BEGIN scripts -->
+    <script defer type="text/javascript" src="assets/js/lib.min.js"></script>
+    <script defer type="text/javascript" src="assets/js/app.min.js"></script>
+    <!-- END scripts -->
+
+</body>
+</html>
