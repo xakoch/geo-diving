@@ -1,3 +1,6 @@
+//===================================================
+// Hero - Section
+//===================================================
 .hero
 	display: grid
 	grid-template-columns: 1fr 1fr
@@ -18,6 +21,9 @@
 	img
 		width: 100%
 
+//===================================================
+// About - Section
+//===================================================
 .about
 	padding: 60px 40px 100px
 	display: grid
@@ -63,3 +69,88 @@
 		align-items: center
 		grid-gap: 16px
 		margin-bottom: 40px
+
+
+//===================================================
+// Certificates - Section
+//===================================================
+.certs
+	padding: 100px 40px
+
+	&__content
+		margin-top: 60px
+		display: grid
+		grid-template-columns: 1fr 1fr
+		grid-gap: 20px
+
+		p
+			font-size: 20px
+			line-height: 130%
+
+	&__col
+		display: flex
+		flex-direction: column
+		grid-gap: 20px
+
+	&__gallery
+		margin-top: 140px
+		background: $primary
+		padding: 20px
+		display: flex
+		align-items: center
+		justify-content: center
+		position: relative
+		height: 400px
+
+		h4
+			color: $w
+			text-transform: uppercase
+			+extra
+			font-size: 18px
+			line-height: 125%
+
+		img
+			position: absolute
+			top: 20px 
+			left: 20px
+			width: 180px
+
+		&-icon
+			position: absolute
+			top: 20px
+			right: 20px
+			display: block
+
+	.hidden
+		display: none
+
+//===================================================
+// Promo - Section
+//===================================================
+.promo
+	min-height: 100vh
+	background-size: cover
+	background-position: center
+	padding: 100px 40px 40px
+
+	&__content
+		display: grid
+		grid-template-columns: repeat(12, 1fr)
+		grid-template-rows: auto
+		grid-gap: 40px
+
+	&__title
+		grid-column: 7 / -1
+
+	&__text
+		grid-column: 9 / -1
+
+	h2
+		+semi
+		font-size: 48px
+		line-height: 100%
+		text-transform: uppercase
+
+	p
+		font-size: 20px
+		line-height: 130%
