@@ -1,6 +1,6 @@
-//===================================================
+//=============================================
 // Hero - Section
-//===================================================
+//=============================================
 .hero
 	display: grid
 	grid-template-columns: 1fr 1fr
@@ -21,9 +21,9 @@
 	img
 		width: 100%
 
-//===================================================
+//=============================================
 // About - Section
-//===================================================
+//=============================================
 .about
 	padding: 60px 40px 100px
 	display: grid
@@ -71,9 +71,9 @@
 		margin-bottom: 40px
 
 
-//===================================================
+//=============================================
 // Certificates - Section
-//===================================================
+//=============================================
 .certs
 	padding: 100px 40px
 
@@ -124,9 +124,9 @@
 	.hidden
 		display: none
 
-//===================================================
+//=============================================
 // Promo - Section
-//===================================================
+//=============================================
 .promo
 	min-height: 100vh
 	background-size: cover
@@ -150,7 +150,75 @@
 		font-size: 48px
 		line-height: 100%
 		text-transform: uppercase
+		text-indent: 5vw
 
 	p
 		font-size: 20px
 		line-height: 130%
+
+
+//=============================================
+// Services - Section
+//=============================================
+.services
+	padding: 100px 40px 40px
+
+	&__list
+		margin-top: 100px
+		display: grid
+		grid-gap: 20px
+		grid-template-columns: repeat(2, 1fr)
+
+.service__card
+	display: grid
+	grid-template-columns: 1fr 3fr
+
+.service__header
+	h4
+		font-size: 24px
+	p
+		font-size: 16px
+		line-height: 120%
+		margin-top: 20px
+
+.service__content
+	border: 1px solid $b
+	border-bottom: 0 solid #000
+
+	.btn-primary
+		width: 100%
+		padding: 25px 0
+
+.service__top
+	display: flex
+	flex-direction: column
+	justify-content: space-between
+	height: calc(100% - 72.5px)
+	padding: 20px
+
+.service__footer
+
+	h5
+		font-size: 24px
+		+bold
+
+	& > p
+		font-size: 12px
+		line-height: 120%
+		color: rgba($b,.7)
+		margin: 20px 0
+
+	&-list
+		display: flex
+
+	&-item
+		span
+			color: rgba($b,.7)
+			font-size: 14px
+			+bold
+			line-height: 120%
+		p
+			color: rgba($b,.7)
+			font-size: 10px
+			line-height: 120%
+			margin-top: 5px
