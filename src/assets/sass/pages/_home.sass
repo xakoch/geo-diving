@@ -17,3 +17,49 @@
 
 	img
 		width: 100%
+
+.about
+	padding: 60px 40px 100px
+	display: grid
+	grid-template-columns: 1fr 2.5fr
+	grid-gap: 240px
+
+	h2
+		font-size: 48px
+		+med
+		text-transform: uppercase
+		text-align: center
+		line-height: 100%
+
+	&__content
+		display: grid
+		grid-template-columns: 1fr 1fr
+		grid-template-rows: auto 1fr
+        
+	&__top
+		grid-column: 1 / -1
+		margin-bottom: 40px
+
+	&__middle
+		margin: 120px 0 100px
+		grid-column: 2
+
+	&__bottom
+		grid-column: 1 / -1
+		display: grid
+		grid-template-columns: repeat(2, 1fr)
+		gap: 60px 20px
+
+	&__card
+		h3
+			font-size: 24px
+			+semi
+		p
+			font-size: 16px
+			line-height: 130%
+
+	&__card-header
+		display: flex
+		align-items: center
+		grid-gap: 16px
+		margin-bottom: 40px
