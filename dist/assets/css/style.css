@@ -2007,6 +2007,7 @@ html.with-fancybox body.hide-scrollbar {
 
 .service__header h4 {
     font-size: 24px;
+    font-weight: 400;
 }
 
 .service__header p {
@@ -2022,14 +2023,15 @@ html.with-fancybox body.hide-scrollbar {
 
 .service__content .btn-primary {
     width: 100%;
-    padding: 25px 0;
+    height: 74px;
+    line-height: 74px;
 }
 
 .service__top {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100% - 72.5px);
+    height: calc(100% - 74px);
     padding: 20px;
 }
 

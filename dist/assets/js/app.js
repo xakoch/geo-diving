@@ -1,6 +1,36 @@
 /**************************************************************
 * Lazy-load
 **************************************************************/
+let lozadObserver;
+
+function initLozad() {
+    try {
+        if (typeof lozad === 'undefined') {
+            console.warn('Lozad не найден');
+            return;
+        }
+        
+        // Уничтожаем предыдущий observer, если существует
+        if (lozadObserver) {
+            lozadObserver = null;
+        }
+        
+        // Создаем новый observer с кастомными настройками
+        lozadObserver = lozad('.lozad', {
+            threshold: 0.1,
+            enableAutoReload: true
+        });
+        
+        lozadObserver.observe();
+        console.log('Lozad initialized successfully');
+    } catch (error) {
+        console.error('Error in initLozad:', error);
+    }
+}
+
+/**************************************************************
+* Lazy-load
+**************************************************************/
 Fancybox.bind("[data-fancybox]", {
 	theme: 'light'
 });
@@ -30,6 +60,7 @@ function initLenis() {
         // Уничтожаем предыдущий экземпляр Lenis, если он существует
         if (lenis) {
             lenis.destroy();
+            lenis = null;
         }
         
         // Создаем новый экземпляр Lenis
@@ -48,6 +79,17 @@ function initLenis() {
         // Привязываем Lenis к requestAnimationFrame для обновления
         function raf(time) {
             lenis.raf(time);
+            // Обновляем lozad observer при скролле с lenis
+            if (lozadObserver && lozadObserver.observer) {
+                // Используем наблюдатель для проверки видимости элементов вместо triggerLoad без параметров
+                const lazyImages = document.querySelectorAll('.lozad:not([data-loaded="true"])');
+                lazyImages.forEach(img => {
+                    if (lozadObserver.observer) {
+                        lozadObserver.observer.unobserve(img);
+                        lozadObserver.observer.observe(img);
+                    }
+                });
+            }
             requestAnimationFrame(raf);
         }
         
@@ -58,21 +100,27 @@ function initLenis() {
         
         if (anchorLinks.length > 0) {
             anchorLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        // Скролл к элементу с помощью Lenis
-                        lenis.scrollTo(targetElement, {
-                            offset: 0,
-                            duration: 1.2,
-                            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                        });
-                    }
-                });
+                if (link && typeof link.addEventListener === 'function') {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Используем event.target вместо this для безопасности
+                        const targetHref = e.target && e.target.getAttribute ? e.target.getAttribute('href') : null;
+                        
+                        if (targetHref && lenis) {
+                            const targetElement = document.querySelector(targetHref);
+                            
+                            if (targetElement) {
+                                // Скролл к элементу с помощью Lenis
+                                lenis.scrollTo(targetElement, {
+                                    offset: 0,
+                                    duration: 1.2,
+                                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                                });
+                            }
+                        }
+                    });
+                }
             });
         }
         
@@ -91,6 +139,9 @@ function initPageTransitions() {
 
         // Добавляем хук для запуска инициализаций после перехода страницы
         barba.hooks.after(() => {
+            // Реинициализируем lozad для нового контента
+            initLozad();
+            
             // Инициализируем анимацию чисел
             initAnimNumbers();
             
@@ -314,6 +365,7 @@ function initWindowInnerheight() {
 function initScript() {
     try {
         initLenis();
+        initLozad();
         initBarbaNavUpdate();
         initWindowInnerheight();
         
