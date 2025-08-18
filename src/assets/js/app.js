@@ -18,16 +18,18 @@ function initLozad() {
         // Создаем новый observer с кастомными настройками
         lozadObserver = lozad('.lozad', {
             threshold: 0.01, // Снижаем порог для лучшего срабатывания на больших элементах
-            rootMargin: '50px', // Добавляем отступы для более раннего срабатывания
+            rootMargin: '150px', // Добавляем отступы для более раннего срабатывания
             enableAutoReload: true
         });
         
         lozadObserver.observe();
         
-        // Дополнительная проверка для элементов с data-background-image
+        // Дополнительная проверка для элементов с data-background-image и видео
         setTimeout(() => {
             const backgroundElements = document.querySelectorAll('.lozad[data-background-image]:not([data-loaded="true"])');
-            backgroundElements.forEach(element => {
+            const videoElements = document.querySelectorAll('.lozad video:not([data-loaded="true"])');
+            
+            [...backgroundElements, ...videoElements].forEach(element => {
                 const rect = element.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
                 
@@ -35,7 +37,16 @@ function initLozad() {
                 if (rect.top < windowHeight && rect.bottom > 0) {
                     if (lozadObserver && lozadObserver.triggerLoad) {
                         lozadObserver.triggerLoad(element);
-                        console.log('Принудительная загрузка background-image для элемента:', element);
+                        console.log('Принудительная загрузка для элемента:', element);
+                        
+                        // Если это видео, запускаем автоплей после загрузки
+                        if (element.tagName === 'VIDEO') {
+                            element.addEventListener('loadeddata', () => {
+                                element.play().catch(e => {
+                                    console.log('Автоплей видео заблокирован:', e);
+                                });
+                            }, { once: true });
+                        }
                     }
                 }
             });
@@ -110,6 +121,15 @@ function initLenis() {
                     if (rect.top < windowHeight + 100 && rect.bottom > -100) {
                         if (lozadObserver.triggerLoad) {
                             lozadObserver.triggerLoad(element);
+                            
+                            // Если это видео, запускаем автоплей после загрузки
+                            if (element.tagName === 'VIDEO') {
+                                element.addEventListener('loadeddata', () => {
+                                    element.play().catch(e => {
+                                        console.log('Автоплей видео заблокирован:', e);
+                                    });
+                                }, { once: true });
+                            }
                         }
                     } else if (lozadObserver.observer) {
                         // Иначе переобсерваем

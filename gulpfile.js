@@ -30,20 +30,23 @@ const path = {
         js: distPath + "assets/js/",
         images: distPath + "assets/img/",
         fonts: distPath + "assets/fonts/",
+        video: distPath + "assets/video/",
     },
     src: {
         html: srcPath + "*.html",
         css: srcPath + "assets/sass/*.sass",
         js: srcPath + "assets/js/*.js",
         images: srcPath + "assets/img/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-        fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+        fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+        video: srcPath + "assets/video/**/*.{mp4,webm,mov,avi}"
     },
     watch: {
         html:   srcPath + "**/*.html",
         js:     srcPath + "assets/js/**/*.js",
         css:    srcPath + "assets/sass/**/*.sass",
         images: srcPath + "assets/img/**/*.{jpg,png,svg,gif,ico,webp,webmanifest,xml,json}",
-        fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}"
+        fonts:  srcPath + "assets/fonts/**/*.{eot,woff,woff2,ttf,svg}",
+        video: srcPath + "assets/video/**/*.{mp4,webm,mov,avi}"
     },
     clean: "./" + distPath
 }
@@ -151,6 +154,12 @@ function fonts() {
     .pipe(browserSync.reload({stream: true}));
 }
 
+function video() {
+    return src(path.src.video, {base: srcPath + "assets/video/"})
+    .pipe(dest(path.build.video))
+    .pipe(browserSync.reload({stream: true}));
+}
+
 function clean() {
     return del(path.clean)
 }
@@ -161,9 +170,10 @@ function watchFiles() {
     gulp.watch([path.watch.js], js)
     gulp.watch([path.watch.images], images)
     gulp.watch([path.watch.fonts], fonts)
+    gulp.watch([path.watch.video], video)
 }
 
-const build = gulp.series(clean, gulp.parallel(html, css, js, images, fonts))
+const build = gulp.series(clean, gulp.parallel(html, css, js, images, fonts, video))
 const watch = gulp.parallel(build, watchFiles, serve)
 
 exports.html = html
@@ -172,6 +182,7 @@ exports.js = js
 exports.images = images
 // exports.webpImages = webpImages
 exports.fonts = fonts
+exports.video = video
 exports.clean = clean
 exports.build = build
 exports.watch = watch
