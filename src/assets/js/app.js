@@ -41,7 +41,7 @@ function initLozad() {
             });
         }, 1000);
         
-        console.log('Lozad initialized successfully');
+        console.log('Lozad initialized successfully - v1.2');
     } catch (error) {
         console.error('Error in initLozad:', error);
     }
