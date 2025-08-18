@@ -17,11 +17,30 @@ function initLozad() {
         
         // Создаем новый observer с кастомными настройками
         lozadObserver = lozad('.lozad', {
-            threshold: 0.1,
+            threshold: 0.01, // Снижаем порог для лучшего срабатывания на больших элементах
+            rootMargin: '50px', // Добавляем отступы для более раннего срабатывания
             enableAutoReload: true
         });
         
         lozadObserver.observe();
+        
+        // Дополнительная проверка для элементов с data-background-image
+        setTimeout(() => {
+            const backgroundElements = document.querySelectorAll('.lozad[data-background-image]:not([data-loaded="true"])');
+            backgroundElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Если элемент виден хотя бы частично, принудительно загружаем
+                if (rect.top < windowHeight && rect.bottom > 0) {
+                    if (lozadObserver && lozadObserver.triggerLoad) {
+                        lozadObserver.triggerLoad(element);
+                        console.log('Принудительная загрузка background-image для элемента:', element);
+                    }
+                }
+            });
+        }, 1000);
+        
         console.log('Lozad initialized successfully');
     } catch (error) {
         console.error('Error in initLozad:', error);
@@ -81,12 +100,21 @@ function initLenis() {
             lenis.raf(time);
             // Обновляем lozad observer при скролле с lenis
             if (lozadObserver && lozadObserver.observer) {
-                // Используем наблюдатель для проверки видимости элементов вместо triggerLoad без параметров
-                const lazyImages = document.querySelectorAll('.lozad:not([data-loaded="true"])');
-                lazyImages.forEach(img => {
-                    if (lozadObserver.observer) {
-                        lozadObserver.observer.unobserve(img);
-                        lozadObserver.observer.observe(img);
+                // Проверяем видимые элементы и принудительно загружаем при необходимости
+                const lazyElements = document.querySelectorAll('.lozad:not([data-loaded="true"])');
+                lazyElements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    // Если элемент виден, принудительно загружаем
+                    if (rect.top < windowHeight + 100 && rect.bottom > -100) {
+                        if (lozadObserver.triggerLoad) {
+                            lozadObserver.triggerLoad(element);
+                        }
+                    } else if (lozadObserver.observer) {
+                        // Иначе переобсерваем
+                        lozadObserver.observer.unobserve(element);
+                        lozadObserver.observer.observe(element);
                     }
                 });
             }
