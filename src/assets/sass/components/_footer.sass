@@ -1,0 +1,28 @@
+.footer
+	display: grid
+	grid-template-columns: 1fr 1fr
+	background: $f5
+	padding: 40px
+	grid-gap: 20px
+
+	&__logo
+		display: flex
+		align-items: flex-end
+		grid-gap: 40px
+
+	&__left
+		font-size: 16px
+		+semi
+		display: flex
+		flex-direction: column
+		justify-content: space-between
+
+	&__right
+		img
+			margin-bottom: 20px
+		p
+			font-size: 16px
+			line-height: 130%
+
+		&-top
+			margin-bottom: 40px

@@ -142,6 +142,12 @@ function initPageTransitions() {
             // Реинициализируем lozad для нового контента
             initLozad();
             
+            // Реинициализируем анимацию изображений
+            initImageScaleAnimation();
+            
+            // Реинициализируем анимацию works items
+            initWorksItemAnimation();
+            
             // Инициализируем анимацию чисел
             initAnimNumbers();
             
@@ -360,6 +366,118 @@ function initWindowInnerheight() {
 }
 
 /**
+ * Инициализирует анимацию изображений при скролле с помощью GSAP (один раз)
+ */
+function initImageScaleAnimation() {
+    try {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP не найден, анимация изображений отключена');
+            return;
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            console.warn('IntersectionObserver не поддерживается');
+            return;
+        }
+
+        const images = document.querySelectorAll('.hero img, .service__img img, .certs__gallery img');
+        
+        if (images.length === 0) return;
+
+        // Устанавливаем начальное состояние для всех изображений
+        gsap.set(images, { scale: 1.4 });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Анимируем к scale(1) только один раз
+                    gsap.to(entry.target, {
+                        scale: 1,
+                        duration: 1.2,
+                        ease: "power2.out"
+                    });
+                    
+                    // Прекращаем наблюдение за этим элементом
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        images.forEach(img => {
+            observer.observe(img);
+        });
+        
+        console.log('Image scale animation with GSAP initialized');
+    } catch (error) {
+        console.error('Error in initImageScaleAnimation:', error);
+    }
+}
+
+/**
+ * Инициализирует анимацию появления блоков works__item с очередью
+ */
+function initWorksItemAnimation() {
+    try {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP не найден, анимация works items отключена');
+            return;
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            console.warn('IntersectionObserver не поддерживается');
+            return;
+        }
+
+        const worksItems = document.querySelectorAll('.works__item');
+        
+        if (worksItems.length === 0) return;
+
+        // Устанавливаем начальное состояние для всех элементов
+        gsap.set(worksItems, { 
+            opacity: 0, 
+            y: 50 
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Находим индекс текущего элемента
+                    const allItems = Array.from(document.querySelectorAll('.works__item'));
+                    const currentIndex = allItems.indexOf(entry.target);
+                    
+                    // Анимируем только этот элемент с задержкой на основе его позиции
+                    gsap.to(entry.target, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power2.out",
+                        delay: (currentIndex % 2) * 0.2 // задержка для четных элементов
+                    });
+                    
+                    // Прекращаем наблюдение за этим элементом
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Наблюдаем за каждым элементом отдельно
+        worksItems.forEach(item => {
+            observer.observe(item);
+        });
+        
+        console.log('Works items animation with GSAP initialized');
+    } catch (error) {
+        console.error('Error in initWorksItemAnimation:', error);
+    }
+}
+
+/**
  * Запускает все скрипты на новой странице
  */
 function initScript() {
@@ -368,6 +486,8 @@ function initScript() {
         initLozad();
         initBarbaNavUpdate();
         initWindowInnerheight();
+        initImageScaleAnimation();
+        initWorksItemAnimation();
         
         console.log('Basic scripts initialized');
     } catch (error) {
