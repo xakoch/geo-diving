@@ -8,8 +8,12 @@
 	padding-left: 40px
 	align-items: center
 
+	&__content
+		opacity: 1
+
 	&__img
 		overflow: hidden
+		opacity: 1
 
 	h1
 		font-size: 64px
@@ -23,6 +27,8 @@
 
 	img
 		width: 100%
+
+// Hero контент управляется через GSAP, CSS скрытие не нужно
 
 //=============================================
 // About - Section
@@ -150,6 +156,13 @@
 		transform: translate(-50%, -50%)
 		z-index: -2
 		object-fit: cover
+		pointer-events: none
+		
+		&::-webkit-media-controls
+			display: none !important
+		
+		&::-webkit-media-controls-start-playback-button
+			display: none !important
 
 	&__overlay
 		position: absolute

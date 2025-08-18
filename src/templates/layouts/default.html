@@ -16,7 +16,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" media="all" href="assets/css/style.min.css" />
 </head>
-<body data-barba="wrapper">
+<body data-barba="wrapper" class="loading">
+
+    <!-- PRELOADER -->
+    <div class="preloader" id="preloader">
+        <div class="preloader__ocean">
+            <div class="preloader__waves">
+                <div class="wave wave1"></div>
+                <div class="wave wave2"></div>
+                <div class="wave wave3"></div>
+            </div>
+            <div class="preloader__bubbles">
+                <div class="bubble bubble1"></div>
+                <div class="bubble bubble2"></div>
+                <div class="bubble bubble3"></div>
+                <div class="bubble bubble4"></div>
+                <div class="bubble bubble5"></div>
+                <div class="bubble bubble6"></div>
+            </div>
+            <!-- <div class="preloader__diver">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                    <circle cx="30" cy="30" r="25" fill="#1C509D" opacity="0.8"/>
+                    <circle cx="30" cy="25" r="8" fill="#ffffff"/>
+                    <rect x="26" y="35" width="8" height="15" fill="#1C509D"/>
+                    <circle cx="30" cy="45" r="3" fill="#ffffff"/>
+                </svg>
+            </div> -->
+        </div>
+        <div class="preloader__content">
+            <h2>Iegremdēšanās daivinga pasaulē</h2>
+            <div class="preloader__progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progressPercent">0</span>%
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main data-barba="container" data-barba-namespace="default">
         <div class="main-wrap">

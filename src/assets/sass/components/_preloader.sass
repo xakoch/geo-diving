@@ -1,0 +1,244 @@
+//=============================================
+// Preloader - Underwater Theme
+//=============================================
+
+// Блокируем скролл и скрываем контент во время загрузки
+body.loading
+	overflow: hidden !important
+	
+	.main-wrap
+		opacity: 0
+		visibility: hidden
+
+.preloader
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	background: linear-gradient(180deg, #1a5490 0%, #0d2a4a 50%, #051529 100%)
+	z-index: 9999
+	display: flex
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	overflow: hidden
+
+	&__ocean
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		overflow: hidden
+
+	&__waves
+		position: absolute
+		top: -50px
+		left: 0
+		width: 100%
+		height: 200px
+
+	&__bubbles
+		position: absolute
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+
+	&__diver
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		animation: diverFloat 3s ease-in-out infinite
+
+	&__content
+		position: relative
+		z-index: 10
+		text-align: center
+		color: white
+		max-width: 400px
+		padding: 40px
+
+	h2
+		font-size: 28px
+		margin-bottom: 20px
+		+semi
+		color: white
+		opacity: 0
+		animation: fadeInUp 1s ease-out 0.5s forwards
+
+	&__progress
+		margin-top: 20px
+
+.progress-bar
+	width: 100%
+	height: 6px
+	background: rgba(255, 255, 255, 0.2)
+	border-radius: 3px
+	overflow: hidden
+	margin-bottom: 15px
+	position: relative
+
+.progress-fill
+	height: 100%
+	background: linear-gradient(90deg, #4fa8d8 0%, #1c509d 100%)
+	border-radius: 3px
+	width: 0%
+	transition: width 0.3s ease
+	position: relative
+	
+	&::after
+		content: ''
+		position: absolute
+		top: 0
+		left: 0
+		height: 100%
+		width: 100%
+		background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)
+		animation: shimmer 2s infinite
+
+.progress-text
+	font-size: 18px
+	+med
+	color: rgba(255, 255, 255, 0.9)
+
+// Waves Animation
+.wave
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	background: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 28' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,10 C30,10 30,20 60,20 C90,20 90,10 120,10 L120,28 L0,28 Z' fill='%23ffffff' fill-opacity='0.1'/%3E%3C/svg%3E") repeat-x
+	background-size: 120px 28px
+	animation-duration: 8s
+	animation-timing-function: linear
+	animation-iteration-count: infinite
+
+.wave1
+	animation-name: waveMove
+	opacity: 0.8
+
+.wave2
+	animation-name: waveMove
+	animation-duration: 6s
+	animation-delay: -2s
+	opacity: 0.6
+
+.wave3
+	animation-name: waveMove
+	animation-duration: 10s
+	animation-delay: -4s
+	opacity: 0.4
+
+// Bubbles Animation
+.bubble
+	position: absolute
+	border-radius: 50%
+	background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3))
+	animation: bubbleFloat linear infinite
+
+.bubble1
+	width: 8px
+	height: 8px
+	left: 10%
+	animation-duration: 6s
+	animation-delay: 0s
+
+.bubble2
+	width: 12px
+	height: 12px
+	left: 20%
+	animation-duration: 8s
+	animation-delay: 2s
+
+.bubble3
+	width: 6px
+	height: 6px
+	left: 35%
+	animation-duration: 7s
+	animation-delay: 1s
+
+.bubble4
+	width: 10px
+	height: 10px
+	left: 50%
+	animation-duration: 9s
+	animation-delay: 3s
+
+.bubble5
+	width: 15px
+	height: 15px
+	left: 70%
+	animation-duration: 6s
+	animation-delay: 4s
+
+.bubble6
+	width: 8px
+	height: 8px
+	left: 85%
+	animation-duration: 8s
+	animation-delay: 1.5s
+
+// Keyframes
+@keyframes waveMove
+	0%
+		background-position-x: 0px
+	100%
+		background-position-x: 120px
+
+@keyframes bubbleFloat
+	0%
+		bottom: -20px
+		opacity: 0
+		transform: translateX(0) scale(0)
+	10%
+		opacity: 1
+		transform: translateX(10px) scale(1)
+	90%
+		opacity: 1
+		transform: translateX(-10px) scale(1)
+	100%
+		bottom: 100vh
+		opacity: 0
+		transform: translateX(0) scale(0)
+
+@keyframes diverFloat
+	0%, 100%
+		transform: translate(-50%, -50%) rotate(0deg)
+	25%
+		transform: translate(-45%, -55%) rotate(2deg)
+	50%
+		transform: translate(-50%, -45%) rotate(0deg)
+	75%
+		transform: translate(-55%, -55%) rotate(-2deg)
+
+@keyframes fadeInUp
+	0%
+		opacity: 0
+		transform: translateY(30px)
+	100%
+		opacity: 1
+		transform: translateY(0)
+
+@keyframes shimmer
+	0%
+		transform: translateX(-100%)
+	100%
+		transform: translateX(100%)
+
+// Preloader hide animation
+.preloader.hide
+	opacity: 0
+	visibility: hidden
+	transition: opacity 0.8s ease, visibility 0.8s ease
+	
+	.preloader__content
+		transform: translateY(-50px)
+		transition: transform 0.8s ease
+
+	.preloader__ocean
+		transform: scale(1.1)
+		transition: transform 0.8s ease

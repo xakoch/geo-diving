@@ -1,65 +1,182 @@
 /**************************************************************
-* Lazy-load
+* Preloader
 **************************************************************/
-let lozadObserver;
+let isFirstLoad = true;
 
-function initLozad() {
-    try {
-        if (typeof lozad === 'undefined') {
-            console.warn('Lozad не найден');
-            return;
-        }
-        
-        // Уничтожаем предыдущий observer, если существует
-        if (lozadObserver) {
-            lozadObserver = null;
-        }
-        
-        // Создаем новый observer с кастомными настройками
-        lozadObserver = lozad('.lozad', {
-            threshold: 0.01, // Снижаем порог для лучшего срабатывания на больших элементах
-            rootMargin: '150px', // Добавляем отступы для более раннего срабатывания
-            enableAutoReload: true
-        });
-        
-        lozadObserver.observe();
-        
-        // Дополнительная проверка для элементов с data-background-image и видео
-        setTimeout(() => {
-            const backgroundElements = document.querySelectorAll('.lozad[data-background-image]:not([data-loaded="true"])');
-            const videoElements = document.querySelectorAll('.lozad video:not([data-loaded="true"])');
-            
-            [...backgroundElements, ...videoElements].forEach(element => {
-                const rect = element.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                
-                // Если элемент виден хотя бы частично, принудительно загружаем
-                if (rect.top < windowHeight && rect.bottom > 0) {
-                    if (lozadObserver && lozadObserver.triggerLoad) {
-                        lozadObserver.triggerLoad(element);
-                        console.log('Принудительная загрузка для элемента:', element);
-                        
-                        // Если это видео, запускаем автоплей после загрузки
-                        if (element.tagName === 'VIDEO') {
-                            element.addEventListener('loadeddata', () => {
-                                element.play().catch(e => {
-                                    console.log('Автоплей видео заблокирован:', e);
-                                });
-                            }, { once: true });
-                        }
-                    }
-                }
-            });
-        }, 1000);
-        
-        console.log('Lozad initialized successfully - v1.2');
-    } catch (error) {
-        console.error('Error in initLozad:', error);
+function initPreloader() {
+    if (!isFirstLoad) return;
+    
+    const preloader = document.getElementById('preloader');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const mainWrap = document.querySelector('.main-wrap');
+    
+    if (!preloader) return;
+    
+    // Добавляем класс loading к body
+    document.body.classList.add('loading');
+    
+    let progress = 0;
+    let videoLoaded = false;
+    let minTimeReached = false;
+    
+    // Минимальное время показа preloader
+    const minDisplayTime = 1500;
+    const startTime = Date.now();
+    
+    function updateProgress(newProgress) {
+        progress = Math.min(newProgress, 100);
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = Math.round(progress);
     }
+    
+    function checkIfCanHide() {
+        if (videoLoaded && minTimeReached) {
+            hidePreloader();
+        }
+    }
+    
+    function hidePreloader() {
+        // Начинаем скрытие preloader
+        preloader.classList.add('hide');
+        
+        // Убираем класс loading и показываем контент
+        document.body.classList.remove('loading');
+        
+        // Плавно показываем основной контент
+        if (mainWrap) {
+            mainWrap.style.transition = 'opacity 1s ease, visibility 1s ease';
+            mainWrap.style.opacity = '1';
+            mainWrap.style.visibility = 'visible';
+        }
+        
+        setTimeout(() => {
+            preloader.style.display = 'none';
+            isFirstLoad = false;
+            
+            // Запускаем анимации после полного появления контента
+            setTimeout(() => {
+                initHeroAnimation();
+                initImageScaleAnimation();
+                initTextAnimation();
+            }, 200);
+            
+        }, 800);
+    }
+    
+    // Ждем загрузки видео в .promo
+    const promoVideo = document.querySelector('.promo__video');
+    if (promoVideo) {
+        let videoProgressLoaded = false;
+        
+        // Анимируем прогресс до 80% пока ждем видео
+        function animateToVideo() {
+            const elapsed = Date.now() - startTime;
+            const progressRatio = Math.min(elapsed / 2000, 1); // 2 секунды до 80%
+            const easedProgress = 80 * easeOutCubic(progressRatio);
+            
+            updateProgress(easedProgress);
+            
+            if (progressRatio < 1 && !videoProgressLoaded) {
+                requestAnimationFrame(animateToVideo);
+            }
+        }
+        
+        // Обработчики событий видео
+        const onVideoCanPlayThrough = () => {
+            console.log('Видео готово к воспроизведению');
+            videoProgressLoaded = true;
+            
+            // Быстро доводим прогресс до 100%
+            const finalProgress = setInterval(() => {
+                progress += 5;
+                updateProgress(progress);
+                
+                if (progress >= 100) {
+                    clearInterval(finalProgress);
+                    videoLoaded = true;
+                    checkIfCanHide();
+                }
+            }, 50);
+        };
+        
+        const onVideoLoadedData = () => {
+            console.log('Видео данные загружены');
+            if (progress < 90) {
+                updateProgress(90);
+            }
+        };
+        
+        const onVideoCanPlay = () => {
+            console.log('Видео может начать воспроизведение');
+            if (progress < 95) {
+                updateProgress(95);
+            }
+        };
+        
+        const onVideoError = () => {
+            console.log('Ошибка загрузки видео, продолжаем без него');
+            videoLoaded = true;
+            updateProgress(100);
+            checkIfCanHide();
+        };
+        
+        // Слушаем события видео
+        promoVideo.addEventListener('loadeddata', onVideoLoadedData, { once: true });
+        promoVideo.addEventListener('canplay', onVideoCanPlay, { once: true });
+        promoVideo.addEventListener('canplaythrough', onVideoCanPlayThrough, { once: true });
+        promoVideo.addEventListener('error', onVideoError, { once: true });
+        
+        // Принудительная загрузка видео
+        promoVideo.load();
+        
+        // Запускаем анимацию прогресса
+        requestAnimationFrame(animateToVideo);
+        
+    } else {
+        // Если видео нет, используем обычную анимацию
+        function animateProgress() {
+            const elapsed = Date.now() - startTime;
+            const progressRatio = Math.min(elapsed / 2000, 1);
+            const easedProgress = 100 * easeOutCubic(progressRatio);
+            
+            updateProgress(easedProgress);
+            
+            if (progressRatio < 1) {
+                requestAnimationFrame(animateProgress);
+            } else {
+                videoLoaded = true;
+                checkIfCanHide();
+            }
+        }
+        
+        requestAnimationFrame(animateProgress);
+    }
+    
+    function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+    }
+    
+    // Проверяем минимальное время
+    setTimeout(() => {
+        minTimeReached = true;
+        checkIfCanHide();
+    }, minDisplayTime);
+    
+    // Fallback - скрываем preloader через максимальное время
+    setTimeout(() => {
+        if (!videoLoaded) {
+            console.log('Fallback: принудительное завершение preloader');
+            videoLoaded = true;
+            updateProgress(100);
+            checkIfCanHide();
+        }
+    }, 8000);
 }
 
+
 /**************************************************************
-* Lazy-load
+* Fancybox
 **************************************************************/
 Fancybox.bind("[data-fancybox]", {
 	theme: 'light'
@@ -67,14 +184,47 @@ Fancybox.bind("[data-fancybox]", {
 
 // Ждем загрузку DOM перед инициализацией Barba
 document.addEventListener('DOMContentLoaded', function() {
+    // Сразу устанавливаем начальные состояния hero элементов
+    setHeroInitialState();
+    
     // Проверяем, загружен ли Barba.js
     if (typeof barba !== 'undefined') {
         initPageTransitions();
     } else {
         console.warn('Barba.js не найден');
-        // Инициализируем скрипты напрямую, если Barba не доступен
-        initScript();
+        // Инициализируем preloader и скрипты напрямую, если Barba не доступен
+        if (isFirstLoad) {
+            initPreloader();
+            
+            // Ждем завершения preloader
+            const waitForPreloader = () => {
+                const preloader = document.getElementById('preloader');
+                if (preloader && preloader.style.display !== 'none') {
+                    setTimeout(waitForPreloader, 100);
+                } else {
+                    initScript();
+                }
+            };
+            
+            waitForPreloader();
+        } else {
+            initScript();
+        }
     }
+    
+    // Fallback - убираем loading класс через 5 секунд на всякий случай
+    setTimeout(() => {
+        if (document.body.classList.contains('loading')) {
+            document.body.classList.remove('loading');
+            const mainWrap = document.querySelector('.main-wrap');
+            if (mainWrap) {
+                mainWrap.style.opacity = '1';
+                mainWrap.style.visibility = 'visible';
+            }
+            // Запускаем hero анимацию в fallback случае
+            initHeroAnimation();
+        }
+    }, 5000);
 });
 
 // Инициализация Lenis для плавного скролла
@@ -109,35 +259,6 @@ function initLenis() {
         // Привязываем Lenis к requestAnimationFrame для обновления
         function raf(time) {
             lenis.raf(time);
-            // Обновляем lozad observer при скролле с lenis
-            if (lozadObserver && lozadObserver.observer) {
-                // Проверяем видимые элементы и принудительно загружаем при необходимости
-                const lazyElements = document.querySelectorAll('.lozad:not([data-loaded="true"])');
-                lazyElements.forEach(element => {
-                    const rect = element.getBoundingClientRect();
-                    const windowHeight = window.innerHeight;
-                    
-                    // Если элемент виден, принудительно загружаем
-                    if (rect.top < windowHeight + 100 && rect.bottom > -100) {
-                        if (lozadObserver.triggerLoad) {
-                            lozadObserver.triggerLoad(element);
-                            
-                            // Если это видео, запускаем автоплей после загрузки
-                            if (element.tagName === 'VIDEO') {
-                                element.addEventListener('loadeddata', () => {
-                                    element.play().catch(e => {
-                                        console.log('Автоплей видео заблокирован:', e);
-                                    });
-                                }, { once: true });
-                            }
-                        }
-                    } else if (lozadObserver.observer) {
-                        // Иначе переобсерваем
-                        lozadObserver.observer.unobserve(element);
-                        lozadObserver.observer.observe(element);
-                    }
-                });
-            }
             requestAnimationFrame(raf);
         }
         
@@ -180,6 +301,11 @@ function initLenis() {
 
 function initPageTransitions() {
     try {
+        // Инициализируем preloader только при первой загрузке
+        if (isFirstLoad) {
+            initPreloader();
+        }
+        
         // Scroll to top before transition begins
         barba.hooks.before(() => {
             window.scrollTo({ top: 0 });
@@ -187,16 +313,10 @@ function initPageTransitions() {
 
         // Добавляем хук для запуска инициализаций после перехода страницы
         barba.hooks.after(() => {
-            // Реинициализируем lozad для нового контента
-            initLozad();
-            
-            // Реинициализируем анимацию изображений
+            // Реинициализируем анимации
+            initHeroAnimation();
             initImageScaleAnimation();
-            
-            // Реинициализируем анимацию works items
             initWorksItemAnimation();
-            
-            // Реинициализируем анимацию текста
             initTextAnimation();
             
             // Инициализируем анимацию чисел
@@ -226,17 +346,28 @@ function initPageTransitions() {
                 once({ next }) {
                     // Initialize on first load
                     updateBodyClass(next.html);
-                    initScript();
                     
-                    // Анимация появления контента при первой загрузке с GSAP
-                    if (typeof gsap !== 'undefined') {
-                        gsap.from(next.container, {
-                            opacity: 0,
-                            duration: 0.5,
-                            ease: 'power1.out',
-                            clearProps: 'all'
-                        });
-                    }
+                    // Ждем завершения preloader перед инициализацией
+                    const waitForPreloader = () => {
+                        const preloader = document.getElementById('preloader');
+                        if (preloader && preloader.style.display !== 'none') {
+                            setTimeout(waitForPreloader, 100);
+                        } else {
+                            initScript();
+                            
+                            // Анимация появления контента при первой загрузке с GSAP
+                            if (typeof gsap !== 'undefined') {
+                                gsap.from(next.container, {
+                                    opacity: 0,
+                                    duration: 0.5,
+                                    ease: 'power1.out',
+                                    clearProps: 'all'
+                                });
+                            }
+                        }
+                    };
+                    
+                    waitForPreloader();
                 },
                 async leave(data) {
                     try {
@@ -321,6 +452,11 @@ function initPageTransitions() {
                 },
                 async beforeEnter({ next }) {
                     updateBodyClass(next.html);
+                    
+                    // Устанавливаем начальные состояния для hero элементов при переходах
+                    setTimeout(() => {
+                        setHeroInitialState();
+                    }, 10);
                     
                     // Подготавливаем элементы для анимации
                     if (typeof gsap !== 'undefined') {
@@ -551,6 +687,11 @@ function initTextAnimation() {
         headings.forEach(heading => {
             // Проверяем, не был ли уже обработан этот заголовок
             if (heading.hasAttribute('data-text-animated')) {
+                // Если уже обработан, просто запускаем анимацию
+                const wordSpans = heading.querySelectorAll('span span');
+                if (wordSpans.length > 0) {
+                    gsap.set(wordSpans, { y: '100%' });
+                }
                 return;
             }
             
@@ -630,17 +771,120 @@ function initTextAnimation() {
 }
 
 /**
+ * Устанавливает начальные состояния для hero анимации
+ */
+function setHeroInitialState() {
+    try {
+        if (typeof gsap === 'undefined') return;
+
+        const heroContent = document.querySelector('.hero__content');
+        const heroImg = document.querySelector('.hero__img');
+        
+        // Устанавливаем начальные состояния сразу (скрываем элементы)
+        if (heroContent) {
+            gsap.set(heroContent, { opacity: 0, y: 30 });
+        }
+        
+        if (heroImg) {
+            gsap.set(heroImg, { opacity: 0, x: 50 });
+        }
+        
+        console.log('Hero initial state set');
+    } catch (error) {
+        console.error('Error in setHeroInitialState:', error);
+    }
+}
+
+/**
+ * Инициализирует анимацию hero секции
+ */
+function initHeroAnimation() {
+    try {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP не найден, hero анимация отключена');
+            return;
+        }
+
+        const heroContent = document.querySelector('.hero__content');
+        const heroImg = document.querySelector('.hero__img');
+        
+        if (!heroContent && !heroImg) return;
+
+        // Создаем временную шкалу для последовательных анимаций
+        const tl = gsap.timeline();
+        
+        // Анимируем контент
+        if (heroContent) {
+            tl.to(heroContent, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+        }
+        
+        // Анимируем изображение
+        if (heroImg) {
+            tl.to(heroImg, {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+                ease: "power2.out"
+            }, "-=0.5"); // Начинаем на 0.5 секунды раньше
+        }
+        
+        console.log('Hero animation started');
+    } catch (error) {
+        console.error('Error in initHeroAnimation:', error);
+    }
+}
+
+/**
+ * Инициализирует автоплей видео
+ */
+function initVideoAutoplay() {
+    try {
+        const promoVideo = document.querySelector('.promo__video');
+        if (promoVideo) {
+            // Попытка запустить видео при загрузке
+            promoVideo.play().catch(error => {
+                console.log('Автоплей заблокирован браузером:', error);
+            });
+            
+            // Запуск при первом взаимодействии с документом
+            const startVideo = () => {
+                promoVideo.play().catch(e => console.log('Не удалось запустить видео:', e));
+                document.removeEventListener('click', startVideo);
+                document.removeEventListener('scroll', startVideo);
+                document.removeEventListener('keydown', startVideo);
+            };
+            
+            document.addEventListener('click', startVideo, { once: true });
+            document.addEventListener('scroll', startVideo, { once: true });
+            document.addEventListener('keydown', startVideo, { once: true });
+        }
+    } catch (error) {
+        console.error('Error in initVideoAutoplay:', error);
+    }
+}
+
+/**
  * Запускает все скрипты на новой странице
  */
 function initScript() {
     try {
         initLenis();
-        initLozad();
         initBarbaNavUpdate();
         initWindowInnerheight();
-        initImageScaleAnimation();
         initWorksItemAnimation();
-        initTextAnimation();
+        initVideoAutoplay();
+        
+        // Анимации запускаются только после preloader или при переходах между страницами
+        if (!isFirstLoad) {
+            initHeroAnimation();
+            initImageScaleAnimation();
+            initTextAnimation();
+        }
         
         console.log('Basic scripts initialized');
     } catch (error) {
