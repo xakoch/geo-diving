@@ -148,6 +148,9 @@ function initPageTransitions() {
             // Реинициализируем анимацию works items
             initWorksItemAnimation();
             
+            // Реинициализируем анимацию текста
+            initTextAnimation();
+            
             // Инициализируем анимацию чисел
             initAnimNumbers();
             
@@ -478,6 +481,107 @@ function initWorksItemAnimation() {
 }
 
 /**
+ * Инициализирует анимацию заголовков по словам снизу вверх
+ */
+function initTextAnimation() {
+    try {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP не найден, анимация текста отключена');
+            return;
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            console.warn('IntersectionObserver не поддерживается');
+            return;
+        }
+
+        const headings = document.querySelectorAll('h1, h2');
+        
+        if (headings.length === 0) return;
+
+        // Подготавливаем каждый заголовок для анимации
+        headings.forEach(heading => {
+            // Проверяем, не был ли уже обработан этот заголовок
+            if (heading.hasAttribute('data-text-animated')) {
+                return;
+            }
+            
+            const text = heading.textContent;
+            const words = text.trim().split(/\s+/);
+            
+            // Особая обработка для promo h2 - применяем text-indent только к первому слову
+            const isPromoH2 = heading.closest('.promo') && heading.tagName === 'H2';
+            
+            heading.innerHTML = '';
+            
+            words.forEach((word, index) => {
+                const wordWrapper = document.createElement('span');
+                wordWrapper.style.cssText = 'display: inline-block; overflow: hidden; vertical-align: top;';
+                
+                // Для первого слова в promo h2 добавляем text-indent
+                if (isPromoH2 && index === 0) {
+                    wordWrapper.style.marginLeft = '5vw';
+                }
+                
+                const wordSpan = document.createElement('span');
+                wordSpan.style.cssText = 'display: inline-block;';
+                wordSpan.textContent = word;
+                
+                wordWrapper.appendChild(wordSpan);
+                heading.appendChild(wordWrapper);
+                
+                // Добавляем пробел после слова (кроме последнего)
+                if (index < words.length - 1) {
+                    heading.appendChild(document.createTextNode(' '));
+                }
+            });
+            
+            // Помечаем как обработанный
+            heading.setAttribute('data-text-animated', 'true');
+            
+            // Устанавливаем начальное состояние для всех слов
+            const wordSpans = heading.querySelectorAll('span span');
+            gsap.set(wordSpans, { y: '100%' });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const wordSpans = entry.target.querySelectorAll('span span');
+                    
+                    if (wordSpans.length === 0) return;
+                    
+                    // Анимируем каждое слово с небольшой задержкой
+                    wordSpans.forEach((span, index) => {
+                        gsap.to(span, {
+                            y: '0%',
+                            duration: 0.8,
+                            ease: "power2.out",
+                            delay: index * 0.05 // небольшая задержка между словами
+                        });
+                    });
+                    
+                    // Прекращаем наблюдение за этим элементом
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        // Наблюдаем за каждым заголовком отдельно
+        headings.forEach(heading => {
+            observer.observe(heading);
+        });
+        
+        console.log('Text animation with GSAP initialized');
+    } catch (error) {
+        console.error('Error in initTextAnimation:', error);
+    }
+}
+
+/**
  * Запускает все скрипты на новой странице
  */
 function initScript() {
@@ -488,6 +592,7 @@ function initScript() {
         initWindowInnerheight();
         initImageScaleAnimation();
         initWorksItemAnimation();
+        initTextAnimation();
         
         console.log('Basic scripts initialized');
     } catch (error) {
