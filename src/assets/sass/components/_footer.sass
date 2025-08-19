@@ -4,11 +4,30 @@
 	background: $f5
 	padding: 40px
 	grid-gap: 20px
+	+r(1200)
+		padding: 40px 20px
+	+r(767)
+		grid-template-columns: 1fr
+		grid-gap: 60px
 
 	&__logo
 		display: flex
 		align-items: flex-end
 		grid-gap: 40px
+		+r(991)
+			grid-gap: 20px
+		+r(767)
+			justify-content: center
+			grid-gap: 15px
+			align-items: center
+		
+		img
+			+r(767)
+				max-width: 100px
+
+		p
+			+r(767)
+				font-size: 12px 
 
 	&__left
 		font-size: 16px
@@ -16,13 +35,32 @@
 		display: flex
 		flex-direction: column
 		justify-content: space-between
+		+r(991)
+			font-size: 15px
+		+r(767)
+			font-size: 14px
+			align-items: center
+			gap: 20px
 
 	&__right
+		+r(767)
+			order: -1
+		
 		img
 			margin-bottom: 20px
+			+r(767)
+				margin-bottom: 15px
+				max-width: 120px
+		
 		p
 			font-size: 16px
 			line-height: 130%
+			+r(991)
+				font-size: 14px
+			+r(767)
+				font-size: 12px
 
 		&-top
 			margin-bottom: 40px
+			+r(767)
+				margin-bottom: 20px

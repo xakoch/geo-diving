@@ -2,17 +2,26 @@
 	display: grid
 	justify-content: space-between
 	grid-template-columns: 1fr 1fr
+	+r(767)
+		grid-template-columns: 1fr
+		grid-gap: 20px
 	&.grid-6
 		.section__title
 			grid-column-start: 2
+			+r(767)
+				grid-column-start: 1
 
 .section__title
 	h2
 		text-transform: uppercase
 		font-size: 48px
 		+semi
+		+r(1024)
+			font-size: 36px
 
 .section__text
 	p
 		font-size: 20px
 		line-height: 130%
+		+r(1024)
+			font-size: 16px

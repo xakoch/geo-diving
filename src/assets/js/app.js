@@ -178,9 +178,38 @@ function initPreloader() {
 /**************************************************************
 * Fancybox
 **************************************************************/
-Fancybox.bind("[data-fancybox]", {
-	theme: 'light'
-});
+function initFancybox() {
+    try {
+        // Проверяем, существует ли Fancybox
+        if (typeof Fancybox === 'undefined') {
+            console.warn('Fancybox не найден');
+            return;
+        }
+
+        // Уничтожаем предыдущие экземпляры Fancybox
+        Fancybox.destroy();
+
+        // Инициализируем Fancybox заново
+        Fancybox.bind("[data-fancybox]", {
+            theme: 'light',
+            hideScrollbar: false,
+            closeButton: 'outside',
+            dragToClose: false,
+            animated: true,
+            showClass: 'f-fadeIn',
+            hideClass: 'f-fadeOut',
+            on: {
+                init: () => {
+                    console.log('Fancybox initialized');
+                }
+            }
+        });
+
+        console.log('Fancybox reinitialized');
+    } catch (error) {
+        console.error('Error in initFancybox:', error);
+    }
+}
 
 // Ждем загрузку DOM перед инициализацией Barba
 document.addEventListener('DOMContentLoaded', function() {
@@ -209,6 +238,8 @@ document.addEventListener('DOMContentLoaded', function() {
             waitForPreloader();
         } else {
             initScript();
+            // Инициализируем Fancybox в случае без Barba
+            initFancybox();
         }
     }
     
@@ -221,9 +252,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 mainWrap.style.opacity = '1';
                 mainWrap.style.visibility = 'visible';
             }
-            // Запускаем анимации и слайдеры в fallback случае
+            // Запускаем анимации, слайдеры, мобильное меню и Fancybox в fallback случае
             initHeroAnimation();
+            initAboutCardAnimation();
             initSwiperSlider();
+            initMobileMenu();
+            initFancybox();
         }
     }, 5000);
 });
@@ -318,13 +352,18 @@ function initPageTransitions() {
             initHeroAnimation();
             initImageScaleAnimation();
             initWorksItemAnimation();
+            initAboutCardAnimation();
             initTextAnimation();
             
             // Инициализируем анимацию чисел
             initAnimNumbers();
             
-            // Инициализируем слайдеры
+            // Инициализируем слайдеры и мобильное меню
             initSwiperSlider();
+            initMobileMenu();
+            
+            // Переинициализируем Fancybox
+            initFancybox();
             
             // Проверяем наличие слайдеров на любой странице
             const sliderBlocks = document.querySelectorAll(".slider-block");
@@ -669,6 +708,67 @@ function initWorksItemAnimation() {
 }
 
 /**
+ * Инициализирует анимацию появления блоков about__card с очередью
+ */
+function initAboutCardAnimation() {
+    try {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP не найден, анимация about cards отключена');
+            return;
+        }
+
+        if (typeof IntersectionObserver === 'undefined') {
+            console.warn('IntersectionObserver не поддерживается');
+            return;
+        }
+
+        const aboutCards = document.querySelectorAll('.about__card');
+        
+        if (aboutCards.length === 0) return;
+
+        // Устанавливаем начальное состояние для всех карточек
+        gsap.set(aboutCards, { 
+            opacity: 0, 
+            y: 40 
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Находим индекс текущего элемента
+                    const allCards = Array.from(document.querySelectorAll('.about__card'));
+                    const currentIndex = allCards.indexOf(entry.target);
+                    
+                    // Анимируем только эту карточку с небольшой задержкой
+                    gsap.to(entry.target, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.7,
+                        ease: "power2.out",
+                        delay: currentIndex * 0.15 // задержка между карточками
+                    });
+                    
+                    // Прекращаем наблюдение за этим элементом
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        // Наблюдаем за каждой карточкой отдельно
+        aboutCards.forEach(card => {
+            observer.observe(card);
+        });
+        
+        console.log('About cards animation with GSAP initialized');
+    } catch (error) {
+        console.error('Error in initAboutCardAnimation:', error);
+    }
+}
+
+/**
  * Инициализирует анимацию заголовков по словам снизу вверх
  */
 function initTextAnimation() {
@@ -936,6 +1036,197 @@ function initSwiperSlider() {
 
 
 /**
+ * Инициализирует мобильное меню
+ */
+function initMobileMenu() {
+    try {
+        const burger = document.querySelector('.burger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const body = document.body;
+
+        if (!burger || !mobileMenu) return;
+
+        let isMenuOpen = false;
+
+        // Функция открытия меню с анимацией
+        function openMenu() {
+            if (isMenuOpen) return;
+            
+            isMenuOpen = true;
+            body.classList.add('menu-open');
+
+            // GSAP анимация бургера и меню
+            if (typeof gsap !== 'undefined') {
+                const navLines = mobileMenu.querySelectorAll('.nav-link-line');
+                const navLinks = mobileMenu.querySelectorAll('.nav-link-wrap a');
+                const menuAction = mobileMenu.querySelector('.mobile-menu__action');
+                const burgerSpans = burger.querySelectorAll('span');
+
+                // Анимируем бургер в крестик
+                gsap.to(burgerSpans[0], {
+                    rotation: 45,
+                    y: 8,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+                gsap.to(burgerSpans[1], {
+                    opacity: 0,
+                    duration: 0.2,
+                    ease: 'power2.out'
+                });
+                gsap.to(burgerSpans[2], {
+                    rotation: -45,
+                    y: -8,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+
+                // Устанавливаем начальные состояния для меню
+                gsap.set(navLines, { 
+                    scaleX: 0,
+                    opacity: 0,
+                    transformOrigin: 'left center',
+                    force3D: true
+                });
+                gsap.set(navLinks, { 
+                    opacity: 0, 
+                    y: 50,
+                    force3D: true
+                });
+                gsap.set(menuAction, { 
+                    opacity: 0, 
+                    y: 60,
+                    force3D: true
+                });
+
+                // Анимируем появление фона меню
+                gsap.to(mobileMenu, {
+                    opacity: 1,
+                    visibility: 'visible',
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+
+                // Создаем временную шкалу для меню
+                const tl = gsap.timeline({ force3D: true });
+
+                // Анимируем линии
+                tl.to(navLines, {
+                    scaleX: 1,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    stagger: 0.08,
+                    force3D: true
+                }, 0.3)
+                
+                // Затем анимируем ссылки плавно снизу вверх
+                .to(navLinks, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    stagger: 0.1,
+                    force3D: true
+                }, 0.4)
+                
+                // В конце анимируем action блок
+                .to(menuAction, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    force3D: true
+                }, 0.8);
+            } else {
+                // Fallback без GSAP
+                burger.classList.add('active');
+            }
+        }
+
+        // Функция закрытия меню
+        function closeMenu() {
+            if (!isMenuOpen) return;
+            
+            isMenuOpen = false;
+            body.classList.remove('menu-open');
+
+            // GSAP анимация закрытия меню и возврата бургера
+            if (typeof gsap !== 'undefined') {
+                const burgerSpans = burger.querySelectorAll('span');
+
+                // Анимируем исчезновение меню
+                gsap.to(mobileMenu, {
+                    opacity: 0,
+                    visibility: 'hidden',
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+
+                // Возвращаем бургер в исходное состояние
+                gsap.to(burgerSpans[0], {
+                    rotation: 0,
+                    y: 0,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+                gsap.to(burgerSpans[1], {
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: 'power2.out',
+                    delay: 0.1
+                });
+                gsap.to(burgerSpans[2], {
+                    rotation: 0,
+                    y: 0,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            } else {
+                // Fallback без GSAP
+                burger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        }
+
+        // Обработчик клика по бургеру
+        burger.addEventListener('click', function() {
+            if (isMenuOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        // Закрытие меню при клике на ссылки
+        const menuLinks = mobileMenu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                closeMenu();
+            });
+        });
+
+        // Закрытие меню при клике на фон
+        mobileMenu.addEventListener('click', function(e) {
+            if (e.target === mobileMenu) {
+                closeMenu();
+            }
+        });
+
+        // Закрытие меню при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMenu();
+            }
+        });
+
+        console.log('Mobile menu with GSAP animations initialized');
+    } catch (error) {
+        console.error('Error in initMobileMenu:', error);
+    }
+}
+
+/**
  * Запускает все скрипты на новой странице
  */
 function initScript() {
@@ -944,15 +1235,19 @@ function initScript() {
         initBarbaNavUpdate();
         initWindowInnerheight();
         initWorksItemAnimation();
+        initAboutCardAnimation();
         initVideoAutoplay();
         
-        // Слайдеры инициализируем всегда
+        // Слайдеры, мобильное меню и Fancybox инициализируем всегда
         initSwiperSlider();
+        initMobileMenu();
+        initFancybox();
         
         // Анимации запускаются только после preloader или при переходах между страницами
         if (!isFirstLoad) {
             initHeroAnimation();
             initImageScaleAnimation();
+            initAboutCardAnimation();
             initTextAnimation();
         }
         

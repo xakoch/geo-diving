@@ -2,10 +2,29 @@
 	position: relative
 	z-index: 10
 
+	// При открытом мобильном меню хедер должен быть поверх
+	body.menu-open &
+		position: fixed
+		top: 0
+		left: 0
+		right: 0
+		z-index: 9999
+		background: transparent
+		
+		+r(1024)
+			// Скрываем все кроме логотипа и бургера на мобильных
+			.header__menu,
+			.header__action,
+			.header__cta
+				display: none
+
 	&__inner
 		display: flex
 		align-items: center
 		justify-content: space-between
+		+r(1024)
+			padding: 15px 20px
+			align-items: center
 
 	&__right
 		display: flex
@@ -15,12 +34,33 @@
 		position: absolute
 		top: 0
 		left: 40px
+		z-index: 10000
+		+r(1024)
+			left: 20px
+		
+		img
+			+r(1600)
+				max-width: 140px
+			+r(1440)
+				max-width: 120px
+			+r(1200)
+				max-width: 100px
+			+r(767)
+				max-width: 120px
 
 	&__action
 		display: flex
 		align-items: center
 		margin: 0 36px 0 120px
 		grid-gap: 25px
+		+r(1600)
+			margin: 0 30px 0 80px
+		+r(1440)
+			margin: 0 20px 0 50px
+		+r(1200)
+			margin: 0 20px 0 30px
+		+r(1024)
+			display: none
 
 	&__call
 		color: $b
@@ -30,11 +70,21 @@
 		display: block
 		&:hover
 			color: $primary
+		+r(1600)
+			font-size: 16px
+		+r(1200)
+			font-size: 14px
+		+r(1024)
+			display: none
 
 	&__lang a
 		color: $b
 		font-size: 18px
 		+med
+		+r(1600)
+			font-size: 16px
+		+r(1200)
+			font-size: 14px
 
 	&__cta
 		text-transform: uppercase
@@ -46,7 +96,11 @@
 		transition: background .25s ease
 		&:hover
 			background: #3ca5ef
-
+		+r(1600)
+			padding: 20px 40px 
+			font-size: 16px
+		+r(1024)
+			display: none
 
 // ===========================
 // Translate Language
@@ -97,3 +151,160 @@
 	background-position: 0px 4px
 	span
 		color: $w
+
+// ===========================
+// Burger Menu
+// ===========================
+.burger
+	display: none
+	flex-direction: column
+	justify-content: center
+	grid-gap: 6px
+	width: 60px
+	height: 40px
+	background: transparent
+	border: none
+	cursor: pointer
+	padding: 0
+	z-index: 9999
+	+r(1024)
+		display: flex
+
+	span
+		width: 100%
+		height: 2px
+		background-color: $primary
+		border-radius: 1px
+		will-change: transform, opacity
+		backface-visibility: hidden
+
+	// При открытом мобильном меню делаем бургер белым
+	body.menu-open &
+		+r(1024)
+			span
+				background-color: $w
+
+// ===========================
+// Mobile Menu
+// ===========================
+.mobile-menu
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	height: 100vh
+	background: #021034
+	// backdrop-filter: blur(10px)
+	z-index: 9998
+	display: flex
+	align-items: center
+	justify-content: center
+	opacity: 0
+	visibility: hidden
+	will-change: opacity, visibility, transform
+	transform: translateZ(0) // Принудительное включение GPU слоя
+	
+	&.active
+		opacity: 1
+		visibility: visible
+
+	&__content
+		width: 100%
+		max-width: 400px
+		padding: 20px 20px 0 20px
+
+	&__menu
+		list-style: none
+		padding: 0
+		margin: 0
+
+		.nav-link-wrap
+			position: relative
+			overflow: hidden
+
+		.nav-link-line
+			background-color: #fff3
+			width: 100%
+			height: .125em
+			position: relative
+			opacity: 0
+			transform-origin: left center
+			will-change: transform, opacity
+
+		a
+			display: block
+			color: $w
+			+med
+			text-decoration: none
+			width: 100%
+			padding: 1.25rem 0
+			font-size: 1.125em
+			transition: color 0.2s ease
+			opacity: 0
+			will-change: transform, opacity
+			backface-visibility: hidden
+
+			&:hover,
+			&:focus
+				color: $primary
+
+	&__action
+		margin-top: 40px
+		display: flex
+		flex-direction: column
+		grid-gap: 20px
+
+		.header__call
+			color: $w
+			font-size: 24px
+			+med
+			display: block
+			text-decoration: none
+			transition: color 0.3s ease
+
+			&:hover
+				color: $primary
+
+		.header__cta
+			display: inline-block
+			text-transform: uppercase
+			color: #021034
+			background: $w
+			font-size: 16px
+			+extra
+			padding: 16px 60px
+			border-radius: 4px
+			text-decoration: none
+			transition: background 0.3s ease
+			max-width: fit-content
+
+			&:hover
+				background: #3ca5ef
+
+	&__lang
+		margin-top: 20px
+		grid-gap: 15px
+		display: flex
+		align-items: center
+
+		a
+			font-size: 16px
+			+med
+			color: #021034
+			background: $w
+			+br(50%)
+			width: 45px
+			height: 45px
+			display: flex
+			align-items: center
+			justify-content: center
+
+
+// ===========================
+// Body Scroll Lock
+// ===========================
+body.menu-open
+	overflow: hidden
+	
+	@media (max-width: 1024px)
+		height: 100vh

@@ -4,9 +4,13 @@
 		align-items: center
 		justify-content: space-between
 		grid-gap: 50px
-		+r(1200)
+		+r(1700)
+			grid-gap: 30px
+		+r(1440)
 			grid-gap: 25px
-		+r(991)
+		+r(1200)
+			grid-gap: 20px
+		+r(1024)
 			display: none
 		a
 			display: block
@@ -18,8 +22,10 @@
 			color: $b
 			height: 100%
 			transition: color .25s ease
-			+r(1200)
+			+r(1600)
 				font-size: 16px
+			+r(1200)
+				font-size: 14px
 			&:hover
 				color: $primary
 
