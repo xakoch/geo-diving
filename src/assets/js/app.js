@@ -221,8 +221,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 mainWrap.style.opacity = '1';
                 mainWrap.style.visibility = 'visible';
             }
-            // Запускаем hero анимацию в fallback случае
+            // Запускаем анимации и слайдеры в fallback случае
             initHeroAnimation();
+            initSwiperSlider();
         }
     }, 5000);
 });
@@ -321,6 +322,9 @@ function initPageTransitions() {
             
             // Инициализируем анимацию чисел
             initAnimNumbers();
+            
+            // Инициализируем слайдеры
+            initSwiperSlider();
             
             // Проверяем наличие слайдеров на любой странице
             const sliderBlocks = document.querySelectorAll(".slider-block");
@@ -868,6 +872,69 @@ function initVideoAutoplay() {
     }
 }
 
+// Глобальная переменная для хранения экземпляра слайдера
+let gallerySlider;
+
+/**
+ * Swiper Slider
+ */
+function initSwiperSlider() {
+    try {
+        // Проверяем, существует ли Swiper
+        if (typeof Swiper === 'undefined') {
+            console.warn('Swiper не найден');
+            return;
+        }
+
+        // Уничтожаем предыдущий экземпляр слайдера, если он существует
+        if (gallerySlider) {
+            gallerySlider.destroy(true, true);
+            gallerySlider = null;
+        }
+
+        // Инициализируем слайдеры только если соответствующие элементы существуют
+        const gallerySliderElement = document.querySelector(".gallery__slider");
+        if (gallerySliderElement) {
+            console.log('Инициализация gallery slider');
+            gallerySlider = new Swiper(".gallery__slider", {
+                slidesPerView: 2,
+                loop: true,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: ".btn-next",
+                    prevEl: ".btn-prev",
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2.5,
+                    },
+                    991: {
+                        slidesPerView: 4,
+                    },
+                    1200: {
+                        slidesPerView: 5,
+                    }
+                },
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false
+                },
+                on: {
+                    init: function () {
+                        console.log('Gallery slider initialized successfully');
+                    }
+                }
+            });
+        } else {
+            console.log('Gallery slider element not found');
+        }
+        
+    } catch (error) {
+        console.error('Error in initSwiperSlider:', error);
+    }
+}
+
+
 /**
  * Запускает все скрипты на новой странице
  */
@@ -878,6 +945,9 @@ function initScript() {
         initWindowInnerheight();
         initWorksItemAnimation();
         initVideoAutoplay();
+        
+        // Слайдеры инициализируем всегда
+        initSwiperSlider();
         
         // Анимации запускаются только после preloader или при переходах между страницами
         if (!isFirstLoad) {

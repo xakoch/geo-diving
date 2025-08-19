@@ -28,8 +28,6 @@
 	img
 		width: 100%
 
-// Hero контент управляется через GSAP, CSS скрытие не нужно
-
 //=============================================
 // About - Section
 //=============================================
@@ -325,6 +323,55 @@
 			font-size: 18px
 			+semi
 
+//=============================================
+// Gallery - Section
+//=============================================
+.gallery
+	padding: 100px 40px
+	position: relative
+
+	&__intro
+		margin-top: 100px
+		display: flex
+		align-items: center
+		border-bottom: 1px solid $w
+		padding-bottom: 20px
+		margin-bottom: 30px
+		grid-gap: 20px
+		p
+			font-size: 20px
+		img
+			width: 14px
+			height: 14px
+
+	&__slider
+		padding-bottom: 15vw
+		img
+			width: 100%
+			object-fit: cover
+			object-position: center
+
+	.swiper-footer
+		position: absolute
+		left: 0
+		bottom: 80px
+		display: flex
+		align-items: center
+		grid-gap: 16px
+
+	.btn-arrow
+		+br(50%)
+		background: $primary
+		width: 64px
+		height: 64px
+		display: flex
+		align-items: center
+		justify-content: center
+		cursor: pointer
+
+	.btn-next
+		svg
+			transform: rotate(180deg)
 
 //=============================================
 // Contacts - Section
