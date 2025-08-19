@@ -744,13 +744,13 @@ function initTextAnimation() {
                     
                     if (wordSpans.length === 0) return;
                     
-                    // Анимируем каждое слово с небольшой задержкой
+                    // Анимируем каждое слово с плавной задержкой
                     wordSpans.forEach((span, index) => {
                         gsap.to(span, {
                             y: '0%',
-                            duration: 0.8,
+                            duration: 1.2,
                             ease: "power2.out",
-                            delay: index * 0.05 // небольшая задержка между словами
+                            delay: index * 0.15 // увеличенная задержка между словами для лучшей видимости
                         });
                     });
                     
