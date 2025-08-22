@@ -474,11 +474,19 @@ function initPageTransitions() {
         
         // Scroll to top before transition begins
         barba.hooks.before(() => {
-            window.scrollTo({ top: 0 });
+            // Скрываем страницу во время перехода
+            document.body.style.visibility = 'hidden';
+            $(window).scrollTop(0); // scroll to top here
         });
 
         // Добавляем хук для запуска инициализаций после перехода страницы
         barba.hooks.after(() => {
+            // Принудительный скролл в начало после загрузки страницы
+            $(window).scrollTop(0);
+            // Показываем страницу после скролла
+            setTimeout(() => {
+                document.body.style.visibility = 'visible';
+            }, 50);
             // Реинициализируем анимации
             initHeroAnimation();
             initImageScaleAnimation();

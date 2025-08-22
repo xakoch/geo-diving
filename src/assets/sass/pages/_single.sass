@@ -1,0 +1,105 @@
+.single__hero
+	display: grid
+	grid-template-columns: 1fr 1fr
+	+r(991)
+		grid-template-columns: 1fr
+
+	&-img
+		img
+			width: 100%
+			object-fit: cover
+			object-position: center
+			+r(991)
+				height: 400px
+				object-position: top
+
+	&-content
+		background: $bb
+		padding: 150px 60px 45px 60px
+		+r(1440)
+			padding: 80px 50px 40px 50px
+		+r(1200)
+			padding: 60px 40px 30px 40px
+		+r(560)
+			padding: 40px 20px
+
+		h1
+			font-size: 64px
+			+r(1440)
+				font-size: 48px
+			+r(1336)
+				font-size: 42px
+			+r(560)
+				font-size: 36px
+
+	.service__top
+		padding: 0
+
+	.service__footer>p,
+	.service__footer-item span,
+	.service__footer-item p
+		color: $w
+	
+	.service__header
+		p
+			font-size: 24px
+			+med
+			margin-top: 40px
+			+r(1440)
+				font-size: 18px
+				margin-top: 20px
+			+r(1200)
+				font-size: 14px
+
+	.service__content
+		border: none
+
+	.service__footer-list
+		grid-gap: 40px
+		+r(560)
+			grid-gap: 15px
+
+	.service__footer-item
+		+r(560)
+			align-items: center
+
+	.service__footer-item span
+		font-size: 24px
+		line-height: 125%
+		font-size: 24px
+		+med
+		+r(1440)
+			font-size: 20px
+		+r(560)
+			font-size: 16px
+
+	.service__footer-item p
+		font-size: 12px
+		line-height: 120%
+		+reg
+		margin-top: 10px
+		+r(560)
+			margin-top: 0
+
+	.service__footer>p
+		font-size: 20px
+		+med
+		margin-top: 40px
+		margin-bottom: 0
+		+r(1440)
+			font-size: 16px
+		+r(1366)
+			font-size: 14px
+		+r(1200)
+			br
+				display: none
+
+	.service__price
+		margin-bottom: 60px
+		+r(1440)
+			margin-bottom: 40px
+		h5
+			font-size: 36px
+			+bold
+			+r(1440)
+				font-size: 28px
