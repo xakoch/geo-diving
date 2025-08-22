@@ -380,6 +380,8 @@ document.addEventListener('DOMContentLoaded', function() {
             initMobileMenu();
             initFancybox();
             initCustomCursor();
+            initStickyHeader();
+            initAnchorLinks();
         }
     }, 5000);
 });
@@ -395,19 +397,56 @@ function handleAnchorClick(e) {
     // Получаем href с текущего элемента
     const targetHref = this.getAttribute('href');
     
-    if (targetHref && lenis) {
+    if (targetHref) {
         const targetElement = document.querySelector(targetHref);
         
         if (targetElement) {
-            // Плавный скролл к элементу с помощью Lenis
-            lenis.scrollTo(targetElement, {
-                offset: -20, // небольшой отступ сверху
-                duration: 1.5,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-            });
-        } else {
-            
+            if (lenis) {
+                // Плавный скролл к элементу с помощью Lenis, учитывая фиксированный header
+                lenis.scrollTo(targetElement, {
+                    offset: -90, // отступ для фиксированного header
+                    duration: 1.5,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+            } else {
+                // Fallback на обычный скролл если Lenis не работает
+                const headerHeight = 90;
+                const elementPosition = targetElement.offsetTop - headerHeight;
+                
+                window.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+            }
         }
+    }
+}
+
+/**
+ * Инициализирует anchor ссылки независимо от Lenis
+ */
+function initAnchorLinks() {
+    try {
+        // Исключаем ссылки из мобильного меню и с атрибутом data-mobile-menu-link
+        const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"]):not([data-mobile-menu-link])');
+        
+        if (anchorLinks.length > 0) {
+            anchorLinks.forEach(link => {
+                // Двойная проверка - пропускаем ссылки из мобильного меню
+                if (link.closest('.mobile-menu') || link.hasAttribute('data-mobile-menu-link')) {
+                    return;
+                }
+                
+                // Удаляем предыдущие обработчики для избежания дублирования
+                link.removeEventListener('click', handleAnchorClick);
+                
+                if (link && typeof link.addEventListener === 'function') {
+                    link.addEventListener('click', handleAnchorClick);
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Error in initAnchorLinks:", error);
     }
 }
 
@@ -446,21 +485,6 @@ function initLenis() {
         
         // Обрабатываем якорные ссылки с Lenis
         initAnchorLinks();
-        
-        function initAnchorLinks() {
-            const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
-            
-            if (anchorLinks.length > 0) {
-                anchorLinks.forEach(link => {
-                    // Удаляем предыдущие обработчики для избежания дублирования
-                    link.removeEventListener('click', handleAnchorClick);
-                    
-                    if (link && typeof link.addEventListener === 'function') {
-                        link.addEventListener('click', handleAnchorClick);
-                    }
-                });
-            }
-        }
         
         
         
@@ -510,15 +534,8 @@ function initPageTransitions() {
             initFancybox();
             initCustomCursor();
             
-            // Переинициализируем якорные ссылки с Lenis
-            if (lenis) {
-                const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
-                
-                anchorLinks.forEach(link => {
-                    link.removeEventListener('click', handleAnchorClick);
-                    link.addEventListener('click', handleAnchorClick);
-                });
-            }
+            // Переинициализируем якорные ссылки
+            initAnchorLinks();
             
             // Проверяем наличие слайдеров на любой странице
             const sliderBlocks = document.querySelectorAll(".slider-block");
@@ -1212,6 +1229,61 @@ function initSwiperSlider() {
 
 
 /**
+ * Инициализирует sticky header с плавными анимациями при скролле
+ */
+function initStickyHeader() {
+    try {
+        const header = document.querySelector('.header');
+        
+        if (!header) return;
+
+        let isScrolled = false;
+        let lastScrollTop = 0;
+        let ticking = false;
+
+        function updateHeader() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const shouldBeScrolled = scrollTop > 50;
+
+            // Добавляем/убираем класс scrolled только при необходимости
+            if (shouldBeScrolled !== isScrolled) {
+                isScrolled = shouldBeScrolled;
+                
+                if (isScrolled) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+
+            lastScrollTop = scrollTop;
+            ticking = false;
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }
+
+        // Проверяем начальное состояние
+        updateHeader();
+
+        // Привязываем обработчик скролла
+        window.addEventListener('scroll', onScroll, { passive: true });
+        
+        // Возвращаем функцию для очистки
+        return function cleanup() {
+            window.removeEventListener('scroll', onScroll);
+        };
+        
+    } catch (error) {
+        console.error("Error in " + arguments.callee.name + ":", error);
+    }
+}
+
+/**
  * Инициализирует мобильное меню
  */
 function initMobileMenu() {
@@ -1374,12 +1446,80 @@ function initMobileMenu() {
             }
         });
 
-        // Закрытие меню при клике на ссылки
+        // Обработка ссылок в мобильном меню с приоритетом
         const menuLinks = mobileMenu.querySelectorAll('a');
         menuLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                closeMenu();
-            });
+            // Добавляем специальный атрибут чтобы отличать от других
+            link.setAttribute('data-mobile-menu-link', 'true');
+            
+            // Удаляем все предыдущие обработчики
+            const newLink = link.cloneNode(true);
+            link.parentNode.replaceChild(newLink, link);
+            
+            newLink.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // Если это anchor ссылка
+                if (href && href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const targetElement = document.querySelector(href);
+                    
+                    if (targetElement) {
+                        // Временно отключаем Lenis если он есть
+                        if (lenis) {
+                            lenis.stop();
+                        }
+                        
+                        // Убираем возможные блокировки скролла
+                        document.body.style.overflow = 'auto';
+                        document.documentElement.style.overflow = 'auto';
+                        
+                        const headerHeight = 90;
+                        const elementPosition = targetElement.offsetTop - headerHeight;
+                        
+                        // Принудительный скролл через анимацию
+                        const startPosition = window.pageYOffset;
+                        const distance = elementPosition - startPosition;
+                        const duration = 1000;
+                        let startTime = null;
+                        
+                        function animation(currentTime) {
+                            if (startTime === null) startTime = currentTime;
+                            const timeElapsed = currentTime - startTime;
+                            const progress = Math.min(timeElapsed / duration, 1);
+                            
+                            // Easing function
+                            const ease = progress * (2 - progress);
+                            const currentPos = startPosition + (distance * ease);
+                            
+                            window.scrollTo(0, currentPos);
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(animation);
+                            } else {
+                                // Возобновляем Lenis если был
+                                if (lenis) {
+                                    lenis.start();
+                                }
+                            }
+                        }
+                        
+                        requestAnimationFrame(animation);
+                        
+                        // Закрываем меню после скролла
+                        setTimeout(() => {
+                            closeMenu();
+                        }, 500);
+                    } else {
+                        closeMenu();
+                    }
+                } else {
+                    // Для обычных ссылок закрываем сразу
+                    closeMenu();
+                }
+            }, true); // Используем capture phase
         });
 
         // Закрытие меню при клике на фон
@@ -1414,12 +1554,16 @@ function initScript() {
         initWorksItemAnimation();
         initAboutCardAnimation();
         initVideoAutoplay();
+        initStickyHeader();
         
         // Слайдеры, мобильное меню и Fancybox инициализируем всегда
         initSwiperSlider();
-        initMobileMenu();
         initFancybox();
         initCustomCursor();
+        
+        // Anchor ссылки инициализируем перед мобильным меню
+        initAnchorLinks();
+        initMobileMenu();
         
         // Анимации запускаются только после preloader или при переходах между страницами
         if (!isFirstLoad) {

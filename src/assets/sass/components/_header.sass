@@ -1,6 +1,26 @@
 .header
-	position: relative
-	z-index: 10
+	position: fixed
+	top: 0
+	left: 0
+	width: 100%
+	z-index: 888
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1)
+	background: $w
+	height: 70px
+	+r(1440)
+		height: 60px
+	
+	// Состояние при скролле
+	&.scrolled
+		background: rgba(255, 255, 255, 0.95)
+		backdrop-filter: blur(20px)
+		-webkit-backdrop-filter: blur(20px)
+		box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1)
+		
+		.header__logo img
+			transform: translateY(-60px) translateX(-65px) scale(.5)
+			+r(1440)
+				transform: translateY(-20px) translateX(-21px) scale(.7)
 
 	// При открытом мобильном меню хедер должен быть поверх
 	body.menu-open &
@@ -23,6 +43,7 @@
 		display: flex
 		align-items: center
 		justify-content: space-between
+		height: 100%
 		+r(1024)
 			padding: 15px 20px
 			align-items: center
@@ -40,14 +61,11 @@
 			left: 20px
 		
 		img
-			+r(1600)
-				max-width: 140px
+			transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)
+			// +r(1600)
+				// max-width: 140px
 			+r(1440)
-				max-width: 120px
-			+r(1200)
-				max-width: 100px
-			+r(767)
-				max-width: 120px
+				max-width: 140px
 
 	&__action
 		display: flex
@@ -93,13 +111,18 @@
 		background: $primary
 		font-size: 18px
 		+extra
-		padding: 24px 66px
+		padding: 0 50px
+		height: 70px
+		display: flex
+		align-items: center
 		transition: background .25s ease
 		&:hover
 			background: #3ca5ef
 		+r(1600)
 			padding: 20px 40px 
 			font-size: 16px
+		+r(1440)
+			height: 60px
 		+r(1024)
 			display: none
 
@@ -312,6 +335,12 @@
 // ===========================
 // Body Scroll Lock
 // ===========================
+// Отступ для основного контента чтобы он не скрывался под header
+body
+	padding-top: 70px
+	+r(1440)
+		padding-top: 60px
+
 body.menu-open
 	overflow: hidden
 	position: fixed
