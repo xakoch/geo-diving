@@ -705,48 +705,4 @@ pagename: home
 	</section>
 	<!-- GALLERY SECTION - END -->
 
-	<!-- CONTACTS SECTION - START -->
-	<section class="contacts">
-		<div class="section__header grid-6">
-			<div class="section__title">
-				<h2>Atsūti savu ziņu</h2>
-			</div>
-		</div>
-		<div class="contacts__cols">
-			<div class="contacts__col contacts__info">
-				<div class="contacts__info-item">
-					<div class="contacts__col-title">
-						<h4>KONTAKTI</h4>
-					</div>
-					<div class="contacts__col-content">
-						<a href="tel:+37123111390">+371 23 111 390</a>
-						<a href="mailto:diving.bloms@gmail.com">diving.bloms@gmail.com</a>
-					</div>
-				</div>
-				<div class="contacts__info-item">
-					<div class="contacts__col-title">
-						<h4>Rekvizīti</h4>
-					</div>
-					<div class="contacts__col-content">
-						<address>SIA “GSMD”, <br> Ikšķiles iela 2 – 2C, <br>Ogre, Ogres nov., LV-5001</address>
-					</div>
-				</div>
-			</div>
-			<div class="contacts__col">
-				<p>Iesūtiet savu jautājumu izmantojot zemāk <br> pieejamo formu, un mēs garantējam, ka <br> atbildēsim pēc iespējas ātrāk.</p>
-				<form action="" autocomplete="off">
-					<input type="text" placeholder="Vārds*" required />
-					<input type="email" placeholder="E-pasts*" required />
-					<input type="tel" placeholder="Tālrunis*" required />
-					<input type="text" placeholder="Dzīvojamās mājas adrese" required />
-					<div class="form-label">
-						<input id="checkbox" name="checkbox" type="checkbox" required />
-						<label for="checkbox">Es piekrītu, ka Geo sidemount diving glabās manis iesniegto informāciju, lai varētu atbildēt uz manu jautājumu.
-						</label>
-					</div>
-					<button class="btn btn-primary">Nosūtīt</button>
-				</form>
-			</div>
-		</div>
-	</section>
-	<!-- CONTACTS SECTION - END -->
+	{{> contacts }}

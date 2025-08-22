@@ -1136,7 +1136,7 @@ function initSwiperSlider() {
         if (gallerySliderElement) {
             console.log('Инициализация gallery slider');
             gallerySlider = new Swiper(".gallery__slider", {
-                slidesPerView: 2,
+                slidesPerView: 1.2,
                 loop: true,
                 spaceBetween: 20,
                 navigation: {
@@ -1145,10 +1145,10 @@ function initSwiperSlider() {
                 },
                 breakpoints: {
                     768: {
-                        slidesPerView: 2.5,
+                        slidesPerView: 2.2,
                     },
                     991: {
-                        slidesPerView: 4,
+                        slidesPerView: 3.5,
                     },
                     1200: {
                         slidesPerView: 5,
