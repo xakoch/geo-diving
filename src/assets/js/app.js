@@ -211,6 +211,135 @@ function initFancybox() {
     }
 }
 
+/**************************************************************
+* Custom Cursor for Certificates Gallery
+**************************************************************/
+function initCustomCursor() {
+    const galleryElement = document.querySelector('.certs__gallery');
+    
+    if (!galleryElement) return;
+    
+    // Проверяем, не создан ли уже курсор
+    let cursor = document.querySelector('.custom-cursor');
+    if (cursor) {
+        cursor.remove();
+    }
+    
+    // Создаем элемент курсора с иконкой
+    cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    cursor.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"/>
+        </svg>
+        <span>Skatīt sertifikātus</span>
+    `;
+    document.body.appendChild(cursor);
+    
+    let isVisible = false;
+    let animationFrameId = null;
+    let lastX = 0;
+    let lastY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let isMoving = false;
+    
+    // Плавная интерполяция позиции
+    function lerp(start, end, factor) {
+        return start + (end - start) * factor;
+    }
+    
+    // Функция для плавного обновления позиции курсора
+    function updateCursorPosition() {
+        if (!isVisible) return;
+        
+        // Плавная интерполяция с коэффициентом 0.15 для плавности
+        lastX = lerp(lastX, targetX, 0.15);
+        lastY = lerp(lastY, targetY, 0.15);
+        
+        cursor.style.left = lastX + 'px';
+        cursor.style.top = lastY + 'px';
+        
+        // Проверяем, нужно ли продолжать анимацию
+        const deltaX = Math.abs(targetX - lastX);
+        const deltaY = Math.abs(targetY - lastY);
+        
+        if (deltaX > 0.5 || deltaY > 0.5) {
+            animationFrameId = requestAnimationFrame(updateCursorPosition);
+        } else {
+            isMoving = false;
+            cursor.classList.remove('moving');
+        }
+    }
+    
+    // Обработчик движения мыши
+    function handleMouseMove(e) {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        
+        if (!isMoving && isVisible) {
+            isMoving = true;
+            cursor.classList.add('moving');
+            updateCursorPosition();
+        }
+    }
+    
+    // Показываем курсор при наведении на галерею
+    galleryElement.addEventListener('mouseenter', (e) => {
+        if (!isVisible) {
+            isVisible = true;
+            
+            // Скрываем курсор на всей странице
+            document.documentElement.style.cursor = 'none';
+            document.body.style.cursor = 'none';
+            
+            // Инициализируем позицию
+            targetX = lastX = e.clientX;
+            targetY = lastY = e.clientY;
+            cursor.style.left = targetX + 'px';
+            cursor.style.top = targetY + 'px';
+            
+            cursor.classList.add('active');
+        }
+    });
+    
+    // Скрываем курсор при уходе с галереи
+    galleryElement.addEventListener('mouseleave', () => {
+        if (isVisible) {
+            isVisible = false;
+            isMoving = false;
+            
+            // Возвращаем обычный курсор
+            document.documentElement.style.cursor = 'auto';
+            document.body.style.cursor = 'auto';
+            
+            cursor.classList.remove('active', 'moving');
+            
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+    });
+    
+    // Отслеживаем движение мыши над галереей
+    galleryElement.addEventListener('mousemove', handleMouseMove);
+    
+    // Очистка при переходах страниц
+    return function cleanup() {
+        if (cursor && cursor.parentNode) {
+            cursor.remove();
+        }
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        document.documentElement.style.cursor = 'auto';
+        document.body.style.cursor = 'auto';
+        isVisible = false;
+        isMoving = false;
+    };
+}
+
 // Ждем загрузку DOM перед инициализацией Barba
 document.addEventListener('DOMContentLoaded', function() {
     // Сразу устанавливаем начальные состояния hero элементов
@@ -240,6 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
             initScript();
             // Инициализируем Fancybox в случае без Barba
             initFancybox();
+            initCustomCursor();
         }
     }
     
@@ -258,6 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
             initSwiperSlider();
             initMobileMenu();
             initFancybox();
+            initCustomCursor();
         }
     }, 5000);
 });
@@ -364,6 +495,7 @@ function initPageTransitions() {
             
             // Переинициализируем Fancybox
             initFancybox();
+            initCustomCursor();
             
             // Проверяем наличие слайдеров на любой странице
             const sliderBlocks = document.querySelectorAll(".slider-block");
@@ -384,6 +516,13 @@ function initPageTransitions() {
             sync: false, // Better to disable sync for proper animations
             debug: false,
             timeout: 7000,
+            prevent: ({ el }) => {
+                // Исключаем ссылки с data-fancybox из обработки Barba
+                return el.hasAttribute('data-fancybox') || 
+                       el.closest('[data-fancybox]') !== null ||
+                       el.getAttribute('href')?.includes('#') ||
+                       el.getAttribute('target') === '_blank';
+            },
             transitions: [{
                 name: 'default',
                 once({ next }) {
@@ -743,9 +882,9 @@ function initAboutCardAnimation() {
                     gsap.to(entry.target, {
                         opacity: 1,
                         y: 0,
-                        duration: 0.7,
-                        ease: "power2.out",
-                        delay: currentIndex * 0.15 // задержка между карточками
+                        duration: 1,
+                        ease: "power3.out",
+                        delay: currentIndex * 0.1 // задержка между карточками
                     });
                     
                     // Прекращаем наблюдение за этим элементом
@@ -1242,6 +1381,7 @@ function initScript() {
         initSwiperSlider();
         initMobileMenu();
         initFancybox();
+        initCustomCursor();
         
         // Анимации запускаются только после preloader или при переходах между страницами
         if (!isFirstLoad) {

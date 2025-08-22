@@ -12,10 +12,11 @@
 		background: transparent
 		
 		+r(1024)
-			// Скрываем все кроме логотипа и бургера на мобильных
+			// Скрываем все кроме бургера на мобильных
 			.header__menu,
 			.header__action,
-			.header__cta
+			.header__cta,
+			.header__logo
 				display: none
 
 	&__inner
@@ -34,7 +35,7 @@
 		position: absolute
 		top: 0
 		left: 40px
-		z-index: 10000
+		z-index: 2
 		+r(1024)
 			left: 20px
 		
@@ -194,15 +195,15 @@
 	width: 100%
 	height: 100vh
 	background: #021034
-	// backdrop-filter: blur(10px)
 	z-index: 9998
-	display: flex
-	align-items: center
-	justify-content: center
 	opacity: 0
 	visibility: hidden
 	will-change: opacity, visibility, transform
 	transform: translateZ(0) // Принудительное включение GPU слоя
+	overflow-y: scroll
+	overflow-x: hidden
+	-webkit-overflow-scrolling: touch
+	overscroll-behavior: contain
 	
 	&.active
 		opacity: 1
@@ -211,7 +212,11 @@
 	&__content
 		width: 100%
 		max-width: 400px
-		padding: 20px 20px 0 20px
+		padding: 100px 20px 100px
+		margin: 0 auto
+		display: flex
+		flex-direction: column
+		min-height: calc(100vh - 40px)
 
 	&__menu
 		list-style: none
@@ -243,6 +248,7 @@
 			opacity: 0
 			will-change: transform, opacity
 			backface-visibility: hidden
+			max-width: fit-content
 
 			&:hover,
 			&:focus
@@ -261,6 +267,7 @@
 			display: block
 			text-decoration: none
 			transition: color 0.3s ease
+			max-width: fit-content
 
 			&:hover
 				color: $primary
@@ -283,9 +290,11 @@
 
 	&__lang
 		margin-top: 20px
+		margin-bottom: 40px
 		grid-gap: 15px
 		display: flex
 		align-items: center
+		padding-bottom: 20px
 
 		a
 			font-size: 16px
@@ -305,6 +314,10 @@
 // ===========================
 body.menu-open
 	overflow: hidden
+	position: fixed
+	width: 100%
+	height: 100vh
 	
-	@media (max-width: 1024px)
+	+r(1024)
 		height: 100vh
+		touch-action: none

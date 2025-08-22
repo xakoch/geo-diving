@@ -4316,6 +4316,9 @@ button.swiper-pagination-bullet {
 
 .about {
   background: #F7F7FA; }
+  .about__img {
+    position: sticky;
+    top: 0; }
   .about .desc {
     padding: 260px 0 60px;
     color: #595E6C;
@@ -4783,3 +4786,4 @@ button.swiper-pagination-bullet {
   @media only screen and (max-width: 767px) {
     .notfound img {
       max-width: 90%; } }
+

@@ -79,7 +79,12 @@
 		grid-gap: 40px
 
 	&__img
+		position: sticky
+		top: 0
+		align-self: start
+		z-index: 10
 		+r(1200)
+			position: static
 			order: -1
 			margin-bottom: 40px
 		+r(767)
@@ -88,7 +93,8 @@
 		img
 			width: 100%
 			height: 100%
-			object-fit: cover
+			object-fit: contain
+			object-position: top
 			+r(1200)
 				height: 400px
 			+r(767)
@@ -170,11 +176,27 @@
 			margin-bottom: 20px
 		+r(479)
 			margin-bottom: 15px
-		
-		img
-			+r(767)
-				width: 32px
-				height: 32px
+
+	&__card-number
+		display: flex
+		align-items: center
+		justify-content: center
+		width: 48px
+		height: 48px
+		background: $primary
+		color: $w
+		font-size: 24px
+		+bold
+		border-radius: 50%
+		flex-shrink: 0
+		+r(767)
+			width: 40px
+			height: 40px
+			font-size: 20px
+		+r(479)
+			width: 36px
+			height: 36px
+			font-size: 18px
 
 
 //=============================================
@@ -214,8 +236,32 @@
 		position: relative
 		height: 400px
 		overflow: hidden
+		cursor: none !important
+		transition: all 0.3s ease
+		border-radius: 8px
 		+r(767)
 			margin-top: 60px
+		
+		// Скрываем курсор на всех дочерних элементах
+		*
+			cursor: none !important
+
+		&:hover
+			transform: translateY(-10px) scale(1.05)
+			box-shadow: 0 20px 40px rgba($primary, 0.4)
+			
+			img
+				transform: scale(1.1) rotate(3deg)
+				
+			&-icon
+				transform: rotate(15deg) scale(1.2)
+				
+			h4
+				transform: translateY(-3px)
+
+			.custom-cursor
+				opacity: 1
+				transform: scale(1)
 
 		h4
 			color: $w
@@ -223,21 +269,65 @@
 			+extra
 			font-size: 18px
 			line-height: 125%
+			transition: all 0.3s ease
 
 		img
 			position: absolute
 			top: 20px 
 			left: 20px
 			width: 180px
+			transition: all 0.3s ease
 
 		&-icon
 			position: absolute
 			top: 20px
 			right: 20px
 			display: block
+			transition: all 0.3s ease
 
-	.hidden
-		display: none
+// Кастомный курсор
+.custom-cursor
+	position: fixed
+	top: 0
+	left: 0
+	background: $w
+	color: $b
+	padding: 10px 20px
+	border-radius: 25px
+	font-size: 16px
+	+med
+	pointer-events: none
+	z-index: 9999
+	opacity: 0
+	transform: translate(-50%, -50%) scale(0.5)
+	transition: opacity 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+	white-space: nowrap
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15)
+	will-change: transform, opacity
+	display: flex
+	align-items: center
+	gap: 8px
+	backdrop-filter: blur(10px)
+	border: 1px solid rgba(255, 255, 255, 0.8)
+
+	&.active
+		opacity: 1
+		transform: translate(-50%, -50%) scale(1)
+
+	&.moving
+		transition: none
+
+	svg
+		width: 16px
+		height: 16px
+		fill: currentColor
+		transition: transform 0.2s ease
+
+	&:hover svg
+		transform: scale(1.1)
+
+.hidden
+	display: none
 
 //=============================================
 // Promo - Section
@@ -384,6 +474,8 @@
 .service__card
 	display: grid
 	grid-template-columns: 1fr 3fr
+	+r(1440)
+		grid-template-columns: 1.5fr 2.5fr
 	+r(767)
 		grid-template-columns: 1fr
 		grid-template-rows: 200px 1fr
@@ -445,6 +537,7 @@
 	justify-content: space-between
 	height: calc(100% - 74px)
 	padding: 20px
+	grid-gap: 20px
 	+r(767)
 		height: calc(100% - 60px)
 		padding: 15px
@@ -487,10 +580,10 @@
 	&-item
 		+r(991)
 			min-width: auto
-		+r(479)
-			display: flex
-			justify-content: space-between
-			align-items: center
+		+r(560)
+			display: grid
+			grid-template-columns: 1fr 1fr
+			grid-gap: 15px
 			
 		span
 			color: rgba($b,.7)
@@ -498,12 +591,18 @@
 			+bold
 			line-height: 120%
 			+r(767)
-				font-size: 13px
+				font-size: 12px
+			+r(560)
+				order: 2
 		p
 			color: rgba($b,.7)
 			font-size: 10px
 			line-height: 120%
 			margin-top: 5px
+			+r(560)
+				margin-top: 0
+				line-height: 100%
+
 
 
 //=============================================
@@ -655,10 +754,51 @@
 		padding-bottom: 15vw
 		+r(991)
 			padding-bottom: 30vw
+
+	// Стили для gallery items
+	.gallery-item
+		position: relative
+		display: block
+		overflow: hidden
+		border-radius: 8px
+		cursor: pointer
+		
 		img
 			width: 100%
+			height: 100%
 			object-fit: cover
 			object-position: center
+			transition: transform 0.4s ease, filter 0.4s ease
+			display: block
+		
+		&:hover
+			img
+				transform: scale(1.1)
+				filter: brightness(0.8)
+			
+			.gallery-overlay
+				opacity: 1
+				
+			.zoom-icon
+				transform: scale(1.2)
+
+	.gallery-overlay
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		bottom: 0
+		background: rgba(0, 0, 0, 0.4)
+		display: flex
+		align-items: center
+		justify-content: center
+		opacity: 0
+		transition: opacity 0.4s ease
+		border-radius: 8px
+
+	.zoom-icon
+		transition: transform 0.3s ease
+		filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3))
 
 	.swiper-footer
 		position: absolute
@@ -680,11 +820,21 @@
 		align-items: center
 		justify-content: center
 		cursor: pointer
+		transition: all 0.3s ease
 		+r(767)
 			width: 45px
 			height: 45px
 
+		&:hover
+			background: lighten($primary, 10%)
+			transform: scale(1.05)
+
+	.btn-prev
+		@extend .btn-arrow
+
 	.btn-next
+		@extend .btn-arrow
+		
 		svg
 			transform: rotate(180deg)
 
