@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run sass:*)"
+      "Bash(npm run sass:*)",
+      "Bash(sed:*)"
     ],
     "deny": [],
     "ask": []

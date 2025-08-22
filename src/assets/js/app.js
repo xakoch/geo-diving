@@ -84,7 +84,6 @@ function initPreloader() {
         
         // Обработчики событий видео
         const onVideoCanPlayThrough = () => {
-            console.log('Видео готово к воспроизведению');
             videoProgressLoaded = true;
             
             // Быстро доводим прогресс до 100%
@@ -101,21 +100,18 @@ function initPreloader() {
         };
         
         const onVideoLoadedData = () => {
-            console.log('Видео данные загружены');
             if (progress < 90) {
                 updateProgress(90);
             }
         };
         
         const onVideoCanPlay = () => {
-            console.log('Видео может начать воспроизведение');
             if (progress < 95) {
                 updateProgress(95);
             }
         };
         
         const onVideoError = () => {
-            console.log('Ошибка загрузки видео, продолжаем без него');
             videoLoaded = true;
             updateProgress(100);
             checkIfCanHide();
@@ -166,7 +162,6 @@ function initPreloader() {
     // Fallback - скрываем preloader через максимальное время
     setTimeout(() => {
         if (!videoLoaded) {
-            console.log('Fallback: принудительное завершение preloader');
             videoLoaded = true;
             updateProgress(100);
             checkIfCanHide();
@@ -182,7 +177,6 @@ function initFancybox() {
     try {
         // Проверяем, существует ли Fancybox
         if (typeof Fancybox === 'undefined') {
-            console.warn('Fancybox не найден');
             return;
         }
 
@@ -200,14 +194,12 @@ function initFancybox() {
             hideClass: 'f-fadeOut',
             on: {
                 init: () => {
-                    console.log('Fancybox initialized');
                 }
             }
         });
 
-        console.log('Fancybox reinitialized');
     } catch (error) {
-        console.error('Error in initFancybox:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
     }
 }
 
@@ -349,7 +341,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof barba !== 'undefined') {
         initPageTransitions();
     } else {
-        console.warn('Barba.js не найден');
         // Инициализируем preloader и скрипты напрямую, если Barba не доступен
         if (isFirstLoad) {
             initPreloader();
@@ -415,7 +406,7 @@ function handleAnchorClick(e) {
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
             });
         } else {
-            console.warn('Элемент не найден:', targetHref);
+            
         }
     }
 }
@@ -423,7 +414,6 @@ function handleAnchorClick(e) {
 function initLenis() {
     try {
         if (typeof Lenis === 'undefined') {
-            console.warn('Lenis не найден');
             return;
         }
         
@@ -473,9 +463,10 @@ function initLenis() {
         }
         
         
-        console.log('Lenis initialized successfully');
+        
     } catch (error) {
-        console.error('Error in initLenis:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -607,7 +598,8 @@ function initPageTransitions() {
                             }
                         }
                     } catch (error) {
-                        console.error('Error in leave transition:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+                        
                     }
                 },
                 async enter({ next }) {
@@ -659,7 +651,8 @@ function initPageTransitions() {
                             next.container.style.opacity = '1';
                         }
                     } catch (error) {
-                        console.error('Error in enter transition:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+                        
                         // Установим непрозрачность напрямую в случае ошибки
                         next.container.style.opacity = '1';
                     }
@@ -701,7 +694,8 @@ function initPageTransitions() {
             }]
         });
     } catch (error) {
-        console.error('Error in initPageTransitions:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
         // Инициализируем скрипты напрямую в случае ошибки
         initScript();
     }
@@ -716,7 +710,8 @@ function updateBodyClass(html) {
         const matches = html.match(/<body.+?class="([^"]*)"/i);
         document.body.setAttribute('class', matches ? matches[1] : '');
     } catch (error) {
-        console.error('Error in updateBodyClass:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -746,7 +741,8 @@ function initBarbaNavUpdate(data) {
             });
         }
     } catch (error) {
-        console.error('Error in initBarbaNavUpdate:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -762,7 +758,8 @@ function initWindowInnerheight() {
 
         // Обработка якорных ссылок теперь происходит в initLenis
     } catch (error) {
-        console.error('Error in initWindowInnerheight:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -772,12 +769,12 @@ function initWindowInnerheight() {
 function initImageScaleAnimation() {
     try {
         if (typeof gsap === 'undefined') {
-            console.warn('GSAP не найден, анимация изображений отключена');
+            
             return;
         }
 
         if (typeof IntersectionObserver === 'undefined') {
-            console.warn('IntersectionObserver не поддерживается');
+            
             return;
         }
 
@@ -811,9 +808,10 @@ function initImageScaleAnimation() {
             observer.observe(img);
         });
         
-        console.log('Image scale animation with GSAP initialized');
+        
     } catch (error) {
-        console.error('Error in initImageScaleAnimation:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -823,12 +821,12 @@ function initImageScaleAnimation() {
 function initWorksItemAnimation() {
     try {
         if (typeof gsap === 'undefined') {
-            console.warn('GSAP не найден, анимация works items отключена');
+            
             return;
         }
 
         if (typeof IntersectionObserver === 'undefined') {
-            console.warn('IntersectionObserver не поддерживается');
+            
             return;
         }
 
@@ -872,9 +870,10 @@ function initWorksItemAnimation() {
             observer.observe(item);
         });
         
-        console.log('Works items animation with GSAP initialized');
+        
     } catch (error) {
-        console.error('Error in initWorksItemAnimation:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -884,12 +883,12 @@ function initWorksItemAnimation() {
 function initAboutCardAnimation() {
     try {
         if (typeof gsap === 'undefined') {
-            console.warn('GSAP не найден, анимация about cards отключена');
+            
             return;
         }
 
         if (typeof IntersectionObserver === 'undefined') {
-            console.warn('IntersectionObserver не поддерживается');
+            
             return;
         }
 
@@ -933,9 +932,10 @@ function initAboutCardAnimation() {
             observer.observe(card);
         });
         
-        console.log('About cards animation with GSAP initialized');
+        
     } catch (error) {
-        console.error('Error in initAboutCardAnimation:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -945,12 +945,12 @@ function initAboutCardAnimation() {
 function initTextAnimation() {
     try {
         if (typeof gsap === 'undefined') {
-            console.warn('GSAP не найден, анимация текста отключена');
+            
             return;
         }
 
         if (typeof IntersectionObserver === 'undefined') {
-            console.warn('IntersectionObserver не поддерживается');
+            
             return;
         }
 
@@ -1039,9 +1039,10 @@ function initTextAnimation() {
             observer.observe(heading);
         });
         
-        console.log('Text animation with GSAP initialized');
+        
     } catch (error) {
-        console.error('Error in initTextAnimation:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1064,9 +1065,10 @@ function setHeroInitialState() {
             gsap.set(heroImg, { opacity: 0, x: 50 });
         }
         
-        console.log('Hero initial state set');
+        
     } catch (error) {
-        console.error('Error in setHeroInitialState:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1076,7 +1078,7 @@ function setHeroInitialState() {
 function initHeroAnimation() {
     try {
         if (typeof gsap === 'undefined') {
-            console.warn('GSAP не найден, hero анимация отключена');
+            
             return;
         }
 
@@ -1108,9 +1110,10 @@ function initHeroAnimation() {
             }, "-=0.5"); // Начинаем на 0.5 секунды раньше
         }
         
-        console.log('Hero animation started');
+        
     } catch (error) {
-        console.error('Error in initHeroAnimation:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1123,12 +1126,12 @@ function initVideoAutoplay() {
         if (promoVideo) {
             // Попытка запустить видео при загрузке
             promoVideo.play().catch(error => {
-                console.log('Автоплей заблокирован браузером:', error);
+                
             });
             
             // Запуск при первом взаимодействии с документом
             const startVideo = () => {
-                promoVideo.play().catch(e => console.log('Не удалось запустить видео:', e));
+                promoVideo.play().catch(e => {});
                 document.removeEventListener('click', startVideo);
                 document.removeEventListener('scroll', startVideo);
                 document.removeEventListener('keydown', startVideo);
@@ -1139,7 +1142,8 @@ function initVideoAutoplay() {
             document.addEventListener('keydown', startVideo, { once: true });
         }
     } catch (error) {
-        console.error('Error in initVideoAutoplay:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1153,7 +1157,7 @@ function initSwiperSlider() {
     try {
         // Проверяем, существует ли Swiper
         if (typeof Swiper === 'undefined') {
-            console.warn('Swiper не найден');
+            
             return;
         }
 
@@ -1166,7 +1170,7 @@ function initSwiperSlider() {
         // Инициализируем слайдеры только если соответствующие элементы существуют
         const gallerySliderElement = document.querySelector(".gallery__slider");
         if (gallerySliderElement) {
-            console.log('Инициализация gallery slider');
+            
             gallerySlider = new Swiper(".gallery__slider", {
                 slidesPerView: 1.2,
                 loop: true,
@@ -1192,16 +1196,17 @@ function initSwiperSlider() {
                 },
                 on: {
                     init: function () {
-                        console.log('Gallery slider initialized successfully');
+                        
                     }
                 }
             });
         } else {
-            console.log('Gallery slider element not found');
+            
         }
         
     } catch (error) {
-        console.error('Error in initSwiperSlider:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1391,9 +1396,10 @@ function initMobileMenu() {
             }
         });
 
-        console.log('Mobile menu with GSAP animations initialized');
+        
     } catch (error) {
-        console.error('Error in initMobileMenu:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
 
@@ -1423,8 +1429,9 @@ function initScript() {
             initTextAnimation();
         }
         
-        console.log('Basic scripts initialized');
+        
     } catch (error) {
-        console.error('Error in initScript:', error);
+        console.error("Error in " + arguments.callee.name + ":", error);
+        
     }
 }
