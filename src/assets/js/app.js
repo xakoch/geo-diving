@@ -1164,8 +1164,9 @@ function initVideoAutoplay() {
     }
 }
 
-// Глобальная переменная для хранения экземпляра слайдера
+// Глобальные переменные для хранения экземпляров слайдеров
 let gallerySlider;
+let certsSlider;
 
 /**
  * Swiper Slider
@@ -1178,10 +1179,15 @@ function initSwiperSlider() {
             return;
         }
 
-        // Уничтожаем предыдущий экземпляр слайдера, если он существует
+        // Уничтожаем предыдущие экземпляры слайдеров, если они существуют
         if (gallerySlider) {
             gallerySlider.destroy(true, true);
             gallerySlider = null;
+        }
+        
+        if (certsSlider) {
+            certsSlider.destroy(true, true);
+            certsSlider = null;
         }
 
         // Инициализируем слайдеры только если соответствующие элементы существуют
@@ -1217,8 +1223,44 @@ function initSwiperSlider() {
                     }
                 }
             });
-        } else {
+        }
+
+        // Инициализируем слайдер сертификатов
+        const certsSliderElement = document.querySelector(".certs__slider");
+        if (certsSliderElement) {
             
+            certsSlider = new Swiper(".certs__slider", {
+                slidesPerView: 1.2,
+                loop: true,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: ".certs .btn-next",
+                    prevEl: ".certs .btn-prev",
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    991: {
+                        slidesPerView: 2.5,
+                    },
+                    1200: {
+                        slidesPerView: 3,
+                    },
+                    1440: {
+                        slidesPerView: 3.5,
+                    }
+                },
+                autoplay: {
+                    delay: 2000,
+                    disableOnInteraction: false
+                },
+                on: {
+                    init: function () {
+                        
+                    }
+                }
+            });
         }
         
     } catch (error) {
