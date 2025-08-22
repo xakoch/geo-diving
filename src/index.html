@@ -1,85 +1,708 @@
 ---
 layout: default
-title: Geo Diving - Preview page
-pagename: index
+title: Home
+pagename: home
 ---
 
-    <style>
-        .devpage {
-            padding: 60px 0;
-        }
+    <!-- HERO SECTION - START -->
+    <section class="hero">
+        <div class="hero__content">
+            <h1>SPILGTAS EMOCIJAS <br> UN NEAIZMIRSTAMS <br> PIEDZĪVOJUMS</h1>
+            <p>Ceļojums zemūdens pasaulē kopā <br/>ar Latvijas labākajiem daiveriem.</p>
+        </div>
+        <div class="hero__img">
+            <img src="assets/img/hero.png" alt="">
+        </div>
+    </section>
+    <!-- HERO SECTION - END -->
 
-        .devpages {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 15px;
-            margin-top: 80px;
-        }
+    <!-- ABOUT SECTION - START -->
+    <section class="about bg-dark text-white">
+        <div class="about__img">
+            <img src="assets/img/about-person.png" alt="">
+        </div>
+        <div class="about__content">
+            <div class="about__top">
+                <h2>Apmācības vada pieredzējis <br> daivinga instruktors Georgijs Oboļevičs.</h2>
+            </div>
+            <div class="about__middle">
+                <p>Trenerim ir bagāta un daudzpusīga pieredze, nirstot dažādās pasaules valstīs, tāpēc paralēli teorētiskajai un praktiskajai apmācībai, varēsi uzzināt arī interesantus un noderīgus pieredzes stāstus par niršanu un zemūdens pasauli. Ja Tev ir velme redzēt pasakaino zemūdens pasauli – Geo Sidemont Diving profesionāļi Tevi sagatavos šim skaistajam ceļojumam.</p>
+            </div>
+            <div class="about__bottom">
+                <!-- About Cards Grid -->
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">1</span>
+                        <h3>Sertificēts instruktors</h3>
+                    </div>
+                    <p>Georgijs ir ieguvis National Dive League izsniegtu <br> "Scuba Instructor Level 2" sertifikātu, kas apliecina <br>viņa kvalifikāciju zemūdens peldēšanas jomā.</p>
+                </div>
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">2</span>
+                        <h3>Starptautiskā pieredze</h3>
+                    </div>
+                    <p>Georgijs ir nesis zemūdens peldēšanu dažādās pasaules valstīs, <br>
+                    kas ļāvis viņam adaptēt mācību metodes atbilstoši <br>
+                    dažādu līmeņu nirēju vajadzībām.</p>
+                </div>
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">3</span>
+                        <h3>Individuāla pieeja mācībām</h3>
+                    </div>
+                    <p>Instruktors ir izstrādājis pedagoģijas metodes, <br>
+                    kas ir pielāgojamas jebkuram studentam, lai maksimāli <br>
+                    attīstītu katras studenta individuālās prasmes.</p>
+                </div>
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">4</span>
+                        <h3>Pieredze Norvēģijā</h3>
+                    </div>
+                    <p>Pēdējos divus gadus viņš ir strādājis niršanas centrā <br>
+                    Norvēģijā, kur apguvis prasmes darboties ekstremālos <br>
+                    ziemeļu reģionu apstākļos.</p>
+                </div>
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">5</span>
+                        <h3>Augsta profesionalitāte un pedantisms</h3>
+                    </div>
+                    <p>Viņš izceļas ar pacietību un pedantismu, <br>
+                    strādājot gan ar niršanas inventāru, gan ar studentiem, <br>
+                    nodrošinot augstāko drošības līmeni.</p>
+                </div>
+                <div class="about__card">
+                    <div class="about__card-header">
+                        <span class="about__card-number">6</span>
+                        <h3>Bagāta pieredze un stāsti</h3>
+                    </div>
+                    <p>Trenerim ir ļoti bagāta pieredze, un viņš dalās <br>
+                    ar dažādiem interesantiem un noderīgiem stāstiem par niršanas <br> piedzīvojumiem, papildinot teorētisko un praktisko apmācību.</p>
+                </div>
+                <!-- About Cards Grid / End -->
+            </div>
+        </div>
+    </section>
+    <!-- ABOUT SECTION - END -->
 
-        @media only screen and (max-width: 1024px) {
-            .devpages {
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: 30px;
-            }
-        }
-        .devpage h2 {
-            margin-bottom: 20px !important;
-        }
-
-        .devpage a {
-            display: table;
-            text-decoration: underline !important;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .devpage a::after {
-            content: "";
-            display: block;
-            position: absolute;
-            top: 0;
-            right: -30px;
-        }
-
-        .devpage a.none {
-            color: #B2B0BB;
-            cursor: not-allowed;
-        }
-
-        .devpage a.none::after {
-            content: "🔒";
-        }
-
-        .devpage a.process {
-            color: #EE9A6B;
-        }
-
-        .devpage a.process::after {
-            content: "⚔️";
-        }
-
-        .devpage a.done {
-            color: #27C062;
-        }
-
-        .devpage a.done::after {
-            content: "✅";
-        }
-    </style>
-
-    <div class="container">
-        <div class="devpage">
-            <h1>Geo Diving - Pages</h1>
-            <hr>
-            <div class="devpages">
-                <div class="dev__group">
-                    <h2>Pages</h2>
-                    <a class="done" href="home.html">Home</a>
-                    <a class="process" href="single.html">Single page</a>
-                    <a class="none" href="privacy.html">Privacy Policy</a>
-                    <a class="none" href="terms.html">Terms & Conditions</a>
-                    <a class="none" href="404.html">404</a>
+    <!-- CERTS SECTION - START -->
+    <section class="certs">
+        <div class="section__header">
+            <div class="section__title">
+                <h2>sertifikāti</h2>
+            </div>
+        </div>
+        <div class="certs__content">
+            <div class="certs__col certs__left">
+                <p>Georgijs Obolevičs ir kvalificēts zemūdens peldēšanas instruktors, kurš ir ieguvis National Dive League izsniegtu sertifikātu “Scuba Instructor Level 2”.</p>
+                <p>Pēdējos divus gadus viņš ir strādājis niršanas centrā Norvēģijā, kur apguvis prasmes darboties ekstremālos apstākļos, kas raksturīgi ziemeļu reģioniem – niršana aukstos un tumšos ūdeņos, kas prasa no nirēja augstu profesionalitāti un fizisko sagatavotību.</p>
+            </div>
+            <div class="certs__col certs__right">
+                <p>Georgijs ir ieguvis plašu pieredzi, nirstot dažādās pasaules valstīs, kas ļauj viņam efektīvi pielāgot mācību metodes atbilstoši dažādu līmeņu nirēju kvalifikācijai. Viņš izceļas ar savu pacietību un pedantismu, strādājot gan ar niršanas inventāru, gan ar studentiem, nodrošinot augstāko drošības līmeni.</p>
+                <p>Instruktors ir izstrādājis pedagoģijas metodes, kuras ir pielāgojamas jebkuram studentam, lai maksimāli attīstītu katra studenta individuālās prasmes un pārliecību zem ūdens.</p>
+                <p>Trenerim ir ļoti bagāta pieredze, tāpēc paralēli teorētiskajai un praktiskajai apmācībai, dzirdēsi arī dažādus interesantus un noderīgus stāstus par niršanas piedzīvojumiem.</p>
+                <a class="certs__gallery" href="assets/img/cert-1.png" data-fancybox="certificates">
+                    <img alt="Certificate picture #1" src="assets/img/cert-1.png">
+                    <h4>skatīt visus sertifikātus</h4>
+                    <span class="certs__gallery-icon">
+                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.57812 12.3555L4.21191 17.7207H8.32812V18.9707H2.07812V12.7207H3.32812V16.8369L8.69824 11.4707L9.57812 12.3555ZM19.5781 1.4707V7.7207H18.3281V3.60449L12.9619 8.9707L12.0781 8.08398L17.4443 2.7207H13.3281V1.4707H19.5781Z" fill="white"/></svg>
+                    </span>
+                </a>
+                <div class="hidden">
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #1" src="assets/img/cert-1.png">
+                    </a>
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #2" src="assets/img/cert-1.png">
+                    </a>
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #3" src="assets/img/cert-1.png">
+                    </a>
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #4" src="assets/img/cert-1.png">
+                    </a>
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #5" src="assets/img/cert-1.png">
+                    </a>
+                    <a href="assets/img/cert-1.png" data-fancybox="certificates">
+                        <img alt="Certificate picture #6" src="assets/img/cert-1.png">
+                    </a>
                 </div>
             </div>
-        </div>    
-    </div>
+        </div>
+    </section>
+    <!-- CERTS SECTION - END -->
+
+    <!-- PROMO SECTION - START -->
+    <section class="promo text-white">
+        <video class="promo__video" autoplay muted loop playsinline preload="metadata" poster="assets/img/video-placeholder.png">
+            <source src="assets/video/promo-video.mp4" type="video/mp4">
+            <source src="assets/video/promo-video.webm" type="video/webm">
+        </video>
+        <div class="promo__overlay"></div>
+        <div class="promo__content">
+            <div class="promo__title">
+                <h2>Zemūdens Piedzīvojumi <br>Visiem Līmeņiem</h2>
+            </div>
+            <div class="promo__text">
+                <p>Piedalies dažādos sertificētos kursos, kas piedāvā prasmes un zināšanas, sākot no ievada niršanā līdz profesionāla līmeņa specializācijām, katrai vecuma grupai un prasmju līmenim.</p>
+            </div>
+        </div>
+    </section>
+    <!-- PROMO SECTION - END -->
+
+    <!-- SERVICES SECTION - START -->
+    <section class="services">
+        <div class="section__header">
+            <div class="section__title">
+                <h2>Pakalpojumi</h2>
+            </div>
+        </div>
+        <div class="services__list">
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-1.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Intro Dive</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                            </div>
+                            <p>Teorētisko zināšanu apguve pirms niršanas <br>Piemērots studentiem ar priekšzināšanām, gan arī bez <br> priekšzināšanām</p>
+                            <h5>70 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-2.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Professional Buoyancy Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>15 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – nav</p>
+                            <h5>400 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-3.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Professional Buoyancy Diver</b></h4>
+                            <p>Kursa laikā tiek apgūtas sekojošas zināšanas:</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>18m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>3</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Maksimāli pieļaujamais niršanas dziļums 30 m <br> Līmeņa prasības studentam: Diver Pēc kursa daiverim ir iespēja paaugstināt savu <br>kvalifikāciju līdz Advencet Universal Diver.</p>
+                            <h5>400 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-4.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Advanced Universal Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-5.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Professional Buoyancy Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-6.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Rescue Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-7.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Nitrox Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-8.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Receeational Sidemount Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service__card">
+                <div class="service__img">
+                    <img src="assets/img/ser-9.png" alt="">
+                </div>
+                <div class="service__content">
+                    <div class="service__top">
+                        <div class="service__header">
+                            <h4>Kurss <b>Dry Suit Diver</b></h4>
+                            <p>Daivings jeb zemūdens peldēšana ar instruktoru <br> atvērtā ūdenī vai baseinā.</p>
+                        </div>
+                        <div class="service__footer">
+                            <div class="service__footer-list">
+                                <div class="service__footer-item">
+                                    <span><b>10 gadi</b></span>
+                                    <p>Minimālais vecums</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>10m</b></span>
+                                    <p>Maksimālais dziļums līdz</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>1</b></span>
+                                    <p>Teorētiskas nodarbības</p>
+                                </div>
+                                <div class="service__footer-item">
+                                    <span><b>5</b></span>
+                                    <p>Nodarbības baseinā/atvērtā ūdenī</p>
+                                </div>
+                            </div>
+                            <p>Līmeņa prasības studentam – Diver <br> Pēc kursa apgūšanas daiverim būs iespēja paaugstināt <br> kvalifikāciju līdz Advanced Professional Buoyancy Diver.</p>
+                            <h5>375 eur</h5>
+                        </div>
+                    </div>
+                    <div class="service__bottom">
+                        <a class="btn btn-primary" href="single.html">pirkt kursu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- SERVICES SECTION - END -->
+
+    <!-- WORKS SECTION - START -->
+    <section class="works bg-dark text-white">
+        <div class="section__header">
+            <div class="section__title">
+                <h2>Zemūdens darbi</h2>
+            </div>
+            <div class="section__text">
+                <p>Piedāvājam pilnu zemūdens darbu spektru, kuru veic mūsu pieredzējušie speciālisti, izmantojotprofesionālu aprīkojumu. Katrs pakalpojums tiek pielāgots klienta vajadzībām un nodrošinaaugstu precizitāti un drošību.</p>
+            </div>
+        </div>
+        <div class="works__list">
+            <div class="works__item">
+                <img src="assets/img/work-1.svg" alt="">
+                <h3>Konstrukciju Izveide Zem Ūdens</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+            <div class="works__item">
+                <img src="assets/img/work-2.svg" alt="">
+                <h3>Zemūdens Meklēšanas Darbi</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+            <div class="works__item">
+                <img src="assets/img/work-3.svg" alt="">
+                <h3>Konstrukciju Demontāža</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+            <div class="works__item">
+                <img src="assets/img/work-4.svg" alt="">
+                <h3>Objektu Apsekošana Zem Ūdens</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+            <div class="works__item">
+                <img src="assets/img/work-5.svg" alt="">
+                <h3>Objektu Pārcelšana vai Izcelšana</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+            <div class="works__item">
+                <img src="assets/img/work-6.svg" alt="">
+                <h3>Kuģu un Jahtu Tīrīšanas Darbi Zem Ūdens</h3>
+                <p>Veicam dažādu konstrukciju izveidi zem ūdens, piemēram, balstu, platformu un piestātņuuzstādīšanu. Nodrošinām rūpīgu izpēti un kvalitatīvu uzstādīšanu, kas atbilst gan tehniskajāmprasībām, gan drošības standartiem.</p>
+            </div>
+        </div>
+        <div class="works__footer">
+            <p>Sazinieties ar mums, lai saņemtu <br> individuāli pielāgotu piedāvājumu!</p>
+            <a class="btn btn-primary" href="#">Pieteikties konsultācijai</a>
+        </div>
+    </section>
+    <!-- WORKS SECTION - END -->
+
+    <!-- GALLERY SECTION - START -->
+    <section class="gallery bg-dark text-white">
+        <div class="section__header">
+            <div class="section__title">
+                <h2>Galerija</h2>
+            </div>
+        </div>
+        <div class="gallery__intro">
+            <img src="assets/img/maximize.svg" alt="">
+            <p>var palielināt un samazināt attēlus</p>
+        </div>
+        <!-- Slider main container -->
+        <div class="gallery__slider swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/1.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/1.png" alt="Gallery image 1">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/2.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/2.png" alt="Gallery image 2">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/3.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/3.png" alt="Gallery image 3">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/4.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/4.png" alt="Gallery image 4">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/5.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/5.png" alt="Gallery image 5">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/1.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/1.png" alt="Gallery image 1">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/2.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/2.png" alt="Gallery image 2">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/3.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/3.png" alt="Gallery image 3">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/4.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/4.png" alt="Gallery image 4">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+                <div class="swiper-slide">
+                    <a href="assets/img/gallery/5.png" data-fancybox="gallery" class="gallery-item">
+                        <img src="assets/img/gallery/5.png" alt="Gallery image 5">
+                        <div class="gallery-overlay">
+                            <svg class="zoom-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="14" cy="14" r="8" stroke="white" stroke-width="2"/>
+                                <path d="m21 21 4.35 4.35" stroke="white" stroke-width="2"/>
+                                <path d="M11 14h6" stroke="white" stroke-width="2"/>
+                                <path d="M14 11v6" stroke="white" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- If we need navigation buttons -->
+            <div class="swiper-footer">
+                <div class="btn-arrow btn-prev">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99999 16.001L20 26.001L21.4 24.601L12.8 16.001L21.4 7.40098L20 6.00098L9.99999 16.001Z" fill="white"/></svg>
+                </div>
+                <div class="btn-arrow btn-next">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99999 16.001L20 26.001L21.4 24.601L12.8 16.001L21.4 7.40098L20 6.00098L9.99999 16.001Z" fill="white"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- GALLERY SECTION - END -->
+
+    {{> contacts }}
