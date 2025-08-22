@@ -396,6 +396,30 @@ document.addEventListener('DOMContentLoaded', function() {
 // Инициализация Lenis для плавного скролла
 let lenis;
 
+// Глобальная функция для обработки якорных ссылок
+function handleAnchorClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Получаем href с текущего элемента
+    const targetHref = this.getAttribute('href');
+    
+    if (targetHref && lenis) {
+        const targetElement = document.querySelector(targetHref);
+        
+        if (targetElement) {
+            // Плавный скролл к элементу с помощью Lenis
+            lenis.scrollTo(targetElement, {
+                offset: -20, // небольшой отступ сверху
+                duration: 1.5,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        } else {
+            console.warn('Элемент не найден:', targetHref);
+        }
+    }
+}
+
 function initLenis() {
     try {
         if (typeof Lenis === 'undefined') {
@@ -431,33 +455,23 @@ function initLenis() {
         requestAnimationFrame(raf);
         
         // Обрабатываем якорные ссылки с Lenis
-        const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
+        initAnchorLinks();
         
-        if (anchorLinks.length > 0) {
-            anchorLinks.forEach(link => {
-                if (link && typeof link.addEventListener === 'function') {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        
-                        // Используем event.target вместо this для безопасности
-                        const targetHref = e.target && e.target.getAttribute ? e.target.getAttribute('href') : null;
-                        
-                        if (targetHref && lenis) {
-                            const targetElement = document.querySelector(targetHref);
-                            
-                            if (targetElement) {
-                                // Скролл к элементу с помощью Lenis
-                                lenis.scrollTo(targetElement, {
-                                    offset: 0,
-                                    duration: 1.2,
-                                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                                });
-                            }
-                        }
-                    });
-                }
-            });
+        function initAnchorLinks() {
+            const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
+            
+            if (anchorLinks.length > 0) {
+                anchorLinks.forEach(link => {
+                    // Удаляем предыдущие обработчики для избежания дублирования
+                    link.removeEventListener('click', handleAnchorClick);
+                    
+                    if (link && typeof link.addEventListener === 'function') {
+                        link.addEventListener('click', handleAnchorClick);
+                    }
+                });
+            }
         }
+        
         
         console.log('Lenis initialized successfully');
     } catch (error) {
@@ -504,6 +518,16 @@ function initPageTransitions() {
             // Переинициализируем Fancybox
             initFancybox();
             initCustomCursor();
+            
+            // Переинициализируем якорные ссылки с Lenis
+            if (lenis) {
+                const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
+                
+                anchorLinks.forEach(link => {
+                    link.removeEventListener('click', handleAnchorClick);
+                    link.addEventListener('click', handleAnchorClick);
+                });
+            }
             
             // Проверяем наличие слайдеров на любой странице
             const sliderBlocks = document.querySelectorAll(".slider-block");
