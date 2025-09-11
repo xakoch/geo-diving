@@ -9,6 +9,7 @@
 			width: 100%
 			object-fit: cover
 			object-position: center
+			height: 100vh
 			+r(991)
 				height: 400px
 				object-position: top
@@ -41,15 +42,28 @@
 		color: $w
 	
 	.service__header
-		p
-			font-size: 24px
+		h5
+			font-size: 18px
 			+med
-			margin-top: 40px
+			margin-top: 40px !important
 			+r(1440)
-				font-size: 18px
-				margin-top: 20px
+				font-size: 16px
+				margin-top: 20px !important
 			+r(1200)
 				font-size: 14px
+		ul
+			margin-top: 20px !important
+			list-style-type: disc !important
+			padding-left: 20px
+			font-size: 16px
+			+r(1200)
+				font-size: 14px
+		p
+			margin: 10px 0
+			font-size: 16px
+			+r(1200)
+				font-size: 14px
+				+reg
 
 	.service__content
 		border: none
@@ -103,3 +117,7 @@
 			+bold
 			+r(1440)
 				font-size: 28px
+
+
+.related-courses
+	background: $f5

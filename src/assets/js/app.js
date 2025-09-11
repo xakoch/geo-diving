@@ -997,7 +997,7 @@ function initTextAnimation() {
             
             words.forEach((word, index) => {
                 const wordWrapper = document.createElement('span');
-                wordWrapper.style.cssText = 'display: inline-block; overflow: hidden; vertical-align: top;';
+                wordWrapper.style.cssText = 'display: inline-block; clip-path: inset(0 0 -0.2em 0); vertical-align: top;';
                 
                 // Для первого слова в promo h2 добавляем text-indent
                 if (isPromoH2 && index === 0) {
