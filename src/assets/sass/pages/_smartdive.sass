@@ -1,0 +1,85 @@
+.sd__hero
+	+r(991)
+		padding-top: 50px
+	img
+		margin: 0 auto
+
+.sd__footer
+	display: grid
+	grid-template-columns: 1fr 1fr
+	grid-gap: 20px
+	margin-top: 60px
+	padding: 60px 40px 60px
+	+r(991)
+		grid-template-columns: 1fr
+		margin-top: 0
+
+	&--info
+		display: flex
+		flex-direction: column
+		grid-gap: 20px
+
+	h3
+		font-size: 64px
+
+	p
+		font-size: 20px
+		line-height: 130%
+
+.sd__list
+	background: $b
+	color: $w
+	padding: 60px 40px
+	display: flex
+	flex-direction: column
+	grid-gap: 120px
+
+.sd__block
+	display: grid
+	grid-template-columns: 1fr 1fr
+	grid-gap: 20px
+	align-items: center
+	+r(991)
+		grid-template-columns: 1fr
+		grid-gap: 40px
+	&.pl80
+		.sd__info
+			padding-left: 80px
+			+r(1440)
+				padding-left: 40px
+			+r(991)
+				padding-left: 0
+
+	h4
+		margin-bottom: 20px !important
+		font-size: 24px
+		+semi
+		line-height: 125%
+
+	p
+		font-size: 18px
+		line-height: 130%
+		+lig
+		max-width: 60%
+		+r(1600)
+			max-width: 80%
+		+r(991)
+			font-size: 16px
+			max-width: 100%
+
+	img
+		+br(16px)
+
+.sd__info
+	display: flex
+	flex-direction: column
+	grid-gap: 60px
+	+r(991)
+		order: 2
+		grid-gap: 30px
+
+.sd__item
+	p
+		margin-bottom: 20px
+		&:last-child
+			margin-bottom: 0
