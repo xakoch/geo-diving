@@ -357,10 +357,12 @@
 //=============================================
 .smartdive
 	padding: 80px 40px
+	+r(991)
+		padding: 60px 20px
 
 	&__wrap
 		border: 1px solid $b
-		padding: 40px
+		padding: 40px 40px 40px 0
 		display: grid
 		grid-template-columns: 1fr 1fr
 		grid-gap: 20px
@@ -368,17 +370,22 @@
 		+r(991)
 			grid-template-columns: 1fr
 			grid-gap: 40px
-			padding: 30px
+			padding: 20px
+		+r(767)
+			grid-gap: 60px
 
 	&__img img
 		margin: 0 auto
+		+r(767)
+			max-width: 80%
+			padding-top: 30px
 
 	&__info
 		display: flex
 		flex-direction: column
 		grid-gap: 40px
 		+r(991)
-			grid-gap: 20px
+			grid-gap: 30px
 
 	h3
 		text-transform: uppercase
@@ -389,6 +396,11 @@
 			font-size: 42px
 		+r(991)
 			font-size: 36px
+		+r(767)
+			font-size: 30px
+		br
+			+r(991)
+				display: none
 
 	p
 		font-size: 20px
