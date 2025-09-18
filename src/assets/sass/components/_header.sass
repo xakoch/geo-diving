@@ -323,22 +323,38 @@
 	&__lang
 		margin-top: 20px
 		margin-bottom: 40px
-		grid-gap: 15px
-		display: flex
-		align-items: center
 		padding-bottom: 20px
 
-		a
-			font-size: 16px
-			+med
-			color: #021034
-			background: $w
-			+br(50%)
-			width: 45px
-			height: 45px
+		.language-chooser
+			position: static
+			top: 0
+			left: 0
+			background: unset
+			padding: 0
+			+br(0)
+			visibility: visible
+
+			span
+				font-size: 16px
+				+med
+				color: #021034
+				background: $w
+				+br(8px)
+				padding: 10px 18px
+				display: flex
+				align-items: center
+				justify-content: center
+
+		ul
+			grid-gap: 15px
 			display: flex
 			align-items: center
-			justify-content: center
+
+		li.active
+			padding: 0
+			border-bottom: none
+			margin-bottom: 0
+			opacity: .5
 
 
 // ===========================
