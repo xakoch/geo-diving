@@ -285,9 +285,9 @@ function initLenis() {
 function initPageTransitions() {
     try {
         // Инициализируем preloader только при первой загрузке
-        if (isFirstLoad) {
+        /* if (isFirstLoad) {
             initPreloader();
-        }
+        } */
         
         // Scroll to top before transition begins
         barba.hooks.before(() => {
@@ -359,16 +359,12 @@ function initPageTransitions() {
                     
                     initScript();
                     
-                    if (typeof gsap !== 'undefined') {
-                        gsap.from(next.container, {
-                            opacity: 0,
-                            duration: 0.5,
-                            ease: 'power1.out',
-                            clearProps: 'all'
-                        });
-                    } else {
-                        next.container.style.opacity = '1';
-                    }
+                    // Запускаем стартовые анимации на первой загрузке
+                    requestAnimationFrame(() => {
+                        initHeroAnimation();
+                        initImageScaleAnimation();
+                        initTextAnimation();
+                    });
                 },
                 async leave(data) {
                     try {
