@@ -1,176 +1,4 @@
 /**************************************************************
-* Preloader
-**************************************************************/
-let isFirstLoad = true;
-
-function initPreloader() {
-    if (!isFirstLoad) return;
-    
-    const preloader = document.getElementById('preloader');
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = document.getElementById('progressPercent');
-    const mainWrap = document.querySelector('.main-wrap');
-    
-    if (!preloader) return;
-    
-    // Добавляем класс loading к body
-    document.body.classList.add('loading');
-    
-    let progress = 0;
-    let videoLoaded = false;
-    let minTimeReached = false;
-    
-    // Минимальное время показа preloader
-    const minDisplayTime = 1500;
-    const startTime = Date.now();
-    
-    function updateProgress(newProgress) {
-        progress = Math.min(newProgress, 100);
-        progressFill.style.width = progress + '%';
-        progressPercent.textContent = Math.round(progress);
-    }
-    
-    function checkIfCanHide() {
-        if (videoLoaded && minTimeReached) {
-            hidePreloader();
-        }
-    }
-    
-    function hidePreloader() {
-        // Начинаем скрытие preloader
-        preloader.classList.add('hide');
-        
-        // Убираем класс loading и показываем контент
-        document.body.classList.remove('loading');
-        
-        // Плавно показываем основной контент
-        if (mainWrap) {
-            mainWrap.style.transition = 'opacity 1s ease, visibility 1s ease';
-            mainWrap.style.opacity = '1';
-            mainWrap.style.visibility = 'visible';
-        }
-        
-        setTimeout(() => {
-            preloader.style.display = 'none';
-            isFirstLoad = false;
-            
-            // Запускаем анимации после полного появления контента
-            setTimeout(() => {
-                initHeroAnimation();
-                initImageScaleAnimation();
-                initTextAnimation();
-            }, 200);
-            
-        }, 800);
-    }
-    
-    // Ждем загрузки видео в .promo
-    const promoVideo = document.querySelector('.promo__video');
-    if (promoVideo) {
-        let videoProgressLoaded = false;
-        
-        // Анимируем прогресс до 80% пока ждем видео
-        function animateToVideo() {
-            const elapsed = Date.now() - startTime;
-            const progressRatio = Math.min(elapsed / 2000, 1); // 2 секунды до 80%
-            const easedProgress = 80 * easeOutCubic(progressRatio);
-            
-            updateProgress(easedProgress);
-            
-            if (progressRatio < 1 && !videoProgressLoaded) {
-                requestAnimationFrame(animateToVideo);
-            }
-        }
-        
-        // Обработчики событий видео
-        const onVideoCanPlayThrough = () => {
-            videoProgressLoaded = true;
-            
-            // Быстро доводим прогресс до 100%
-            const finalProgress = setInterval(() => {
-                progress += 5;
-                updateProgress(progress);
-                
-                if (progress >= 100) {
-                    clearInterval(finalProgress);
-                    videoLoaded = true;
-                    checkIfCanHide();
-                }
-            }, 50);
-        };
-        
-        const onVideoLoadedData = () => {
-            if (progress < 90) {
-                updateProgress(90);
-            }
-        };
-        
-        const onVideoCanPlay = () => {
-            if (progress < 95) {
-                updateProgress(95);
-            }
-        };
-        
-        const onVideoError = () => {
-            videoLoaded = true;
-            updateProgress(100);
-            checkIfCanHide();
-        };
-        
-        // Слушаем события видео
-        promoVideo.addEventListener('loadeddata', onVideoLoadedData, { once: true });
-        promoVideo.addEventListener('canplay', onVideoCanPlay, { once: true });
-        promoVideo.addEventListener('canplaythrough', onVideoCanPlayThrough, { once: true });
-        promoVideo.addEventListener('error', onVideoError, { once: true });
-        
-        // Принудительная загрузка видео
-        promoVideo.load();
-        
-        // Запускаем анимацию прогресса
-        requestAnimationFrame(animateToVideo);
-        
-    } else {
-        // Если видео нет, используем обычную анимацию
-        function animateProgress() {
-            const elapsed = Date.now() - startTime;
-            const progressRatio = Math.min(elapsed / 2000, 1);
-            const easedProgress = 100 * easeOutCubic(progressRatio);
-            
-            updateProgress(easedProgress);
-            
-            if (progressRatio < 1) {
-                requestAnimationFrame(animateProgress);
-            } else {
-                videoLoaded = true;
-                checkIfCanHide();
-            }
-        }
-        
-        requestAnimationFrame(animateProgress);
-    }
-    
-    function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-    }
-    
-    // Проверяем минимальное время
-    setTimeout(() => {
-        minTimeReached = true;
-        checkIfCanHide();
-    }, minDisplayTime);
-    
-    // Fallback - скрываем preloader через максимальное время
-    setTimeout(() => {
-        if (!videoLoaded) {
-            videoLoaded = true;
-            updateProgress(100);
-            checkIfCanHide();
-        }
-    }, 8000);
-}
-
-
-/**************************************************************
 * Fancybox
 **************************************************************/
 function initFancybox() {
@@ -334,58 +162,18 @@ function initCustomCursor() {
 
 // Ждем загрузку DOM перед инициализацией Barba
 document.addEventListener('DOMContentLoaded', function() {
-    // Сразу устанавливаем начальные состояния hero элементов
     setHeroInitialState();
-    
-    // Проверяем, загружен ли Barba.js
     if (typeof barba !== 'undefined') {
         initPageTransitions();
     } else {
-        // Инициализируем preloader и скрипты напрямую, если Barba не доступен
-        if (isFirstLoad) {
-            initPreloader();
-            
-            // Ждем завершения preloader
-            const waitForPreloader = () => {
-                const preloader = document.getElementById('preloader');
-                if (preloader && preloader.style.display !== 'none') {
-                    setTimeout(waitForPreloader, 100);
-                } else {
-                    initScript();
-                }
-            };
-            
-            waitForPreloader();
-        } else {
-            initScript();
-            // Инициализируем Fancybox в случае без Barba
-            initFancybox();
-            initCustomCursor();
-        }
-    }
-    
-    // Fallback - убираем loading класс через 5 секунд на всякий случай
-    setTimeout(() => {
-        if (document.body.classList.contains('loading')) {
-            document.body.classList.remove('loading');
-            const mainWrap = document.querySelector('.main-wrap');
-            if (mainWrap) {
-                mainWrap.style.opacity = '1';
-                mainWrap.style.visibility = 'visible';
-            }
-            // Запускаем анимации, слайдеры, мобильное меню и Fancybox в fallback случае
+        initScript();
+        requestAnimationFrame(() => {
             initHeroAnimation();
-            initAboutCardAnimation();
-            initSwiperSlider();
-            initMobileMenu();
-            initFancybox();
-            initCustomCursor();
-            initStickyHeader();
-            initAnchorLinks();
-        }
-    }, 5000);
+            initImageScaleAnimation();
+            initTextAnimation();
+        });
+    }
 });
-
 // Инициализация Lenis для плавного скролла
 let lenis;
 
@@ -569,27 +357,18 @@ function initPageTransitions() {
                     // Initialize on first load
                     updateBodyClass(next.html);
                     
-                    // Ждем завершения preloader перед инициализацией
-                    const waitForPreloader = () => {
-                        const preloader = document.getElementById('preloader');
-                        if (preloader && preloader.style.display !== 'none') {
-                            setTimeout(waitForPreloader, 100);
-                        } else {
-                            initScript();
-                            
-                            // Анимация появления контента при первой загрузке с GSAP
-                            if (typeof gsap !== 'undefined') {
-                                gsap.from(next.container, {
-                                    opacity: 0,
-                                    duration: 0.5,
-                                    ease: 'power1.out',
-                                    clearProps: 'all'
-                                });
-                            }
-                        }
-                    };
+                    initScript();
                     
-                    waitForPreloader();
+                    if (typeof gsap !== 'undefined') {
+                        gsap.from(next.container, {
+                            opacity: 0,
+                            duration: 0.5,
+                            ease: 'power1.out',
+                            clearProps: 'all'
+                        });
+                    } else {
+                        next.container.style.opacity = '1';
+                    }
                 },
                 async leave(data) {
                     try {
@@ -1213,10 +992,10 @@ function initSwiperSlider() {
                         slidesPerView: 5,
                     }
                 },
-                autoplay: {
-                    delay: 2500,
-                    disableOnInteraction: false
-                },
+                // autoplay: {
+                //     delay: 2500,
+                //     disableOnInteraction: false
+                // },
                 on: {
                     init: function () {
                         
@@ -1598,23 +1377,14 @@ function initScript() {
         initVideoAutoplay();
         initStickyHeader();
         
-        // Слайдеры, мобильное меню и Fancybox инициализируем всегда
+        // ???>??????????<, ?????+??>???????? ??????? ?? Fancybox ?????????>??????????? ???????????
         initSwiperSlider();
         initFancybox();
         initCustomCursor();
         
-        // Anchor ссылки инициализируем перед мобильным меню
+        // Anchor ?????<?>??? ?????????>??????????? ???????? ?????+??>?????<?? ???????
         initAnchorLinks();
         initMobileMenu();
-        
-        // Анимации запускаются только после preloader или при переходах между страницами
-        if (!isFirstLoad) {
-            initHeroAnimation();
-            initImageScaleAnimation();
-            initAboutCardAnimation();
-            initTextAnimation();
-        }
-        
         
     } catch (error) {
         console.error("Error in " + arguments.callee.name + ":", error);
